@@ -30,7 +30,7 @@ export default function Home() {
 				src={'/assets/images/onboarding-img.png'}
 				width={1000}
 				height={1000}
-				className='side-img max-w-[50%]'
+				className='side-img max-w-[50%] rounded-l-xl'
 				alt='onboarding welcome'
 			/>
 		</main>

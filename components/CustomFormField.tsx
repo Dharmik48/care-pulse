@@ -65,18 +65,17 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 			)
 		case FormFieldTypes.PHONE:
 			return (
-				<div className='flex rounded-md border border-dark-500 bg-dark-400'>
-					<FormControl>
-						<PhoneInput
-							defaultCountry='IN'
-							className='shad-input border-0 ml-2'
-							international={true}
-							withCountryCallingCode={true}
-							placeholder={props.placeholder}
-							{...field}
-						/>
-					</FormControl>
-				</div>
+				<FormControl>
+					<PhoneInput
+						defaultCountry='IN'
+						className='input-phone'
+						international={true}
+						withCountryCallingCode={true}
+						placeholder={props.placeholder}
+						{...field}
+						onChange={field.onChange}
+					/>
+				</FormControl>
 			)
 		default:
 			break
