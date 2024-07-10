@@ -84,7 +84,11 @@ const RegisterForm = ({ user }: { user: User }) => {
 								>
 									{GenderOptions.map(gender => (
 										<div key={gender} className='radio-group'>
-											<RadioGroupItem value={gender} id={gender} />
+											<RadioGroupItem
+												className='h-auto'
+												value={gender}
+												id={gender}
+											/>
 											<Label
 												htmlFor={gender}
 												className='cursor-pointer capitalize w-full'
