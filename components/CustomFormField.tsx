@@ -24,6 +24,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from './ui/select'
+import { Checkbox } from './ui/checkbox'
 
 interface Props {
 	control: Control<any>
@@ -135,6 +136,22 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 							<SelectGroup>{props.children}</SelectGroup>
 						</SelectContent>
 					</Select>
+				</FormControl>
+			)
+		case FormFieldTypes.CHECKBOX:
+			return (
+				<FormControl>
+					<div className='flex items-center gap-2'>
+						<Checkbox
+							id={field.name}
+							name={field.name}
+							checked={field.value}
+							onCheckedChange={field.onChange}
+						/>
+						<FormLabel htmlFor={field.name} className='checkbox-label'>
+							{props.label}
+						</FormLabel>
+					</div>
 				</FormControl>
 			)
 	}
