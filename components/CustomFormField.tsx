@@ -16,6 +16,14 @@ import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import { cn } from '@/lib/utils'
+import { Textarea } from './ui/textarea'
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectTrigger,
+	SelectValue,
+} from './ui/select'
 
 interface Props {
 	control: Control<any>
@@ -29,6 +37,7 @@ interface Props {
 	renderSkeleton?: (field: any) => React.ReactNode
 	showTimeSelect?: boolean
 	className?: string
+	children?: React.ReactNode
 }
 
 const RenderField = ({ field, props }: { field: any; props: Props }) => {
@@ -50,6 +59,19 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 					<FormControl>
 						<Input
 							className='shad-input border-0'
+							placeholder={props.placeholder}
+							{...field}
+						/>
+					</FormControl>
+				</div>
+			)
+		case FormFieldTypes.TEXTAREA:
+			return (
+				<div className='flex rounded-md border border-dark-500 bg-dark-400'>
+					{icon}
+					<FormControl>
+						<Textarea
+							className='shad-textArea border-0'
 							placeholder={props.placeholder}
 							{...field}
 						/>
@@ -102,8 +124,19 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 			)
 		case FormFieldTypes.SKELETON:
 			return props.renderSkeleton ? props.renderSkeleton(field) : null
-		default:
-			break
+		case FormFieldTypes.SELECT:
+			return (
+				<FormControl>
+					<Select onValueChange={field.onChange} defaultValue={field.value}>
+						<SelectTrigger className='shad-select-trigger'>
+							<SelectValue placeholder={props.placeholder} />
+						</SelectTrigger>
+						<SelectContent className='shad-select-content'>
+							<SelectGroup>{props.children}</SelectGroup>
+						</SelectContent>
+					</Select>
+				</FormControl>
+			)
 	}
 }
 

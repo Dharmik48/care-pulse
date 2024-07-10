@@ -9,9 +9,11 @@ import { z } from 'zod'
 import { PatientFormSchema } from '@/lib/validations'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
-import { FormFieldTypes, GenderOptions } from '@/constants'
+import { Doctors, FormFieldTypes, GenderOptions } from '@/constants'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
+import { SelectItem } from './ui/select'
+import Image from 'next/image'
 
 const RegisterForm = ({ user }: { user: User }) => {
 	const [isLoading, setIsLoading] = useState(false)
@@ -31,6 +33,7 @@ const RegisterForm = ({ user }: { user: User }) => {
 					<h2 className='header'>Welcome👋🏻,</h2>
 					<p className='text-dark-700'>Let us know more about yourself.</p>
 				</div>
+				{/* Personal info */}
 				<section className='space-y-6'>
 					<div className='mb-8'>
 						<h3 className='sub-header'>Personal Information</h3>
@@ -133,6 +136,93 @@ const RegisterForm = ({ user }: { user: User }) => {
 							placeholder='+00 0342 0453 34'
 							label='Emergency Contact Number'
 							fieldType={FormFieldTypes.PHONE}
+							className='lg:w-1/2'
+						/>
+					</div>
+				</section>
+
+				{/* Medical info */}
+				<section className='space-y-6'>
+					<div className='mb-8'>
+						<h3 className='sub-header'>Medical Information</h3>
+					</div>
+					<CustomFormField
+						control={form.control}
+						name='primaryPhysician'
+						placeholder='Select your primary physician'
+						label='Primary Physician'
+						fieldType={FormFieldTypes.SELECT}
+					>
+						{Doctors.map(doctor => (
+							<SelectItem
+								key={doctor.name}
+								value={doctor.name}
+								className='cursor-pointer hover:bg-dark-500'
+							>
+								<div className='flex gap-2 items-center'>
+									<Image
+										src={doctor.image}
+										width={32}
+										height={32}
+										alt={`${doctor.name} picture`}
+										className='rounded-full border border-dark-500'
+									/>
+									<p>{doctor.name}</p>
+								</div>
+							</SelectItem>
+						))}
+					</CustomFormField>
+					{/* Insurace provider and number */}
+					<div className='flex flex-col lg:flex-row gap-6'>
+						<CustomFormField
+							control={form.control}
+							name='insuranceProvider'
+							placeholder='ex: BlueCross'
+							label='Insurance Provider'
+							fieldType={FormFieldTypes.TEXT}
+						/>
+						<CustomFormField
+							control={form.control}
+							name='insurancePolicyNumber'
+							placeholder='ex: ABC1234567'
+							label='Insurance Policy Number'
+							fieldType={FormFieldTypes.TEXT}
+							className='lg:w-1/2'
+						/>
+					</div>
+					{/* Allergies and medications */}
+					<div className='flex flex-col lg:flex-row gap-6'>
+						<CustomFormField
+							control={form.control}
+							name='allergies'
+							placeholder='ex: Peanuts, Penicillin, Pollen'
+							label='Allergies'
+							fieldType={FormFieldTypes.TEXTAREA}
+						/>
+						<CustomFormField
+							control={form.control}
+							name='currentMedications'
+							placeholder='ex: Ibuprofen 200mg, Levothyroxine 50mcg'
+							label='Current Medications'
+							fieldType={FormFieldTypes.TEXTAREA}
+							className='lg:w-1/2'
+						/>
+					</div>
+					{/* Family medical history and past history */}
+					<div className='flex flex-col lg:flex-row gap-6'>
+						<CustomFormField
+							control={form.control}
+							name='familyMedicalHistory'
+							placeholder='ex: Mother had breast cancer'
+							label='Family Medical History'
+							fieldType={FormFieldTypes.TEXTAREA}
+						/>
+						<CustomFormField
+							control={form.control}
+							name='pastMedicalHistory'
+							placeholder='ex: Asthma diagnosis in childhood'
+							label='Past Medical History'
+							fieldType={FormFieldTypes.TEXTAREA}
 							className='lg:w-1/2'
 						/>
 					</div>
