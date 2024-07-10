@@ -4,22 +4,13 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from './ui/form'
-import { Button } from './ui/button'
 import CustomFormField from './CustomFormField'
 import SubmitBtn from './SubmitBtn'
 import { useState } from 'react'
 import { PatientFormSchema } from '@/lib/validations'
 import { createUser } from '@/lib/actions/patient.actions'
 import { useRouter } from 'next/navigation'
-
-export enum FormFieldTypes {
-	TEXT = 'text',
-	TEXTAREA = 'textarea',
-	DATE = 'date',
-	CHECKBOX = 'checkbox',
-	EMAIL = 'email',
-	PHONE = 'phone',
-}
+import { FormFieldTypes } from '@/constants'
 
 const PatientForm = () => {
 	const [isLoading, setIsLoading] = useState(false)
