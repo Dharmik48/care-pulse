@@ -8,8 +8,8 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
 
 	return (
 		<main className='flex max-h-screen h-screen'>
-			<div className='container my-auto h-[90%] remove-scrollbar'>
-				<section className='sub-container max-w-2xl justify-between h-full'>
+			<div className='container remove-scrollbar'>
+				<section className='sub-container max-w-3xl py-10 h-full'>
 					<Image
 						src={'/assets/icons/logo-full.svg'}
 						height={500}
@@ -18,21 +18,16 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
 						alt='Care pulse logo'
 					/>
 					<RegisterForm user={user} />
-					<div className='flex justify-between text-14-regular items-center mt-8'>
-						<p className='copyright'>
-							&copy;carepulse {new Date().getFullYear()}
-						</p>
-						<Link href={'/?admin=true'} className='text-green-500'>
-							Admin
-						</Link>
-					</div>
+					<p className='copyright py-8'>
+						&copy;carepulse {new Date().getFullYear()}
+					</p>
 				</section>
 			</div>
 			<Image
 				src={'/assets/images/register-img.png'}
 				width={1000}
 				height={1000}
-				className='side-img max-w-[40%] rounded-l-xl'
+				className='side-img max-w-[30%] rounded-l-xl'
 				alt='register welcome'
 			/>
 		</main>
