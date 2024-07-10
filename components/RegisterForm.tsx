@@ -3,17 +3,23 @@
 import { forwardRef, useState } from 'react'
 import CustomFormField from './CustomFormField'
 import SubmitBtn from './SubmitBtn'
-import { Form } from './ui/form'
+import { Form, FormControl } from './ui/form'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { PatientFormSchema } from '@/lib/validations'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
-import { Doctors, FormFieldTypes, GenderOptions } from '@/constants'
+import {
+	Doctors,
+	FormFieldTypes,
+	GenderOptions,
+	IdentificationTypes,
+} from '@/constants'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { SelectItem } from './ui/select'
 import Image from 'next/image'
+import FileUploader from './FileUploader'
 
 const RegisterForm = ({ user }: { user: User }) => {
 	const [isLoading, setIsLoading] = useState(false)
@@ -228,6 +234,47 @@ const RegisterForm = ({ user }: { user: User }) => {
 					</div>
 				</section>
 
+				{/* Identification and Verfication */}
+				<section className='space-y-6'>
+					<div className='mb-8'>
+						<h3 className='sub-header'>Identification and Verfication</h3>
+					</div>
+					<CustomFormField
+						control={form.control}
+						name='identificationType'
+						placeholder='Select Identification Type'
+						label='Identification Type'
+						fieldType={FormFieldTypes.SELECT}
+					>
+						{IdentificationTypes.map(option => (
+							<SelectItem
+								key={option}
+								value={option}
+								className='cursor-pointer hover:bg-dark-500'
+							>
+								<p>{option}</p>
+							</SelectItem>
+						))}
+					</CustomFormField>
+					<CustomFormField
+						control={form.control}
+						name='identificationNumber'
+						placeholder='ex: 1234567'
+						label='Identification Number'
+						fieldType={FormFieldTypes.TEXT}
+					/>
+					<CustomFormField
+						control={form.control}
+						name='identificationDocumentId'
+						label='Scanned Copy of Identification Document'
+						fieldType={FormFieldTypes.SKELETON}
+						renderSkeleton={field => (
+							<FormControl>
+								<FileUploader files={field.value} onChange={field.onChange} />
+							</FormControl>
+						)}
+					/>
+				</section>
 				<SubmitBtn isLoading={isLoading}>Get Started</SubmitBtn>
 			</form>
 		</Form>
