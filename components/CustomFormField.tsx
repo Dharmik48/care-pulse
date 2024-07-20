@@ -39,6 +39,7 @@ interface Props {
 	showTimeSelect?: boolean
 	className?: string
 	children?: React.ReactNode
+	dateFormat?: string
 }
 
 const RenderField = ({ field, props }: { field: any; props: Props }) => {
@@ -119,6 +120,7 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 							timeInputLabel='Time: '
 							wrapperClassName='date-picker'
 							placeholderText={props.placeholder}
+							dateFormat={props.dateFormat}
 						/>
 					</FormControl>
 				</div>

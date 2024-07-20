@@ -1,7 +1,10 @@
 import AppointmentForm from '@/components/AppointmentForm'
+import { getPatient } from '@/lib/actions/patient.actions'
 import Image from 'next/image'
 
-const NewAppointment = () => {
+const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
+	const patient = await getPatient(userId)
+
 	return (
 		<main className='flex max-h-screen h-screen'>
 			<div className='container my-auto h-[90%]'>
@@ -13,7 +16,12 @@ const NewAppointment = () => {
 						className='mb-12 h-10 w-max'
 						alt='Care pulse logo'
 					/>
-					<AppointmentForm type='create' />
+					<AppointmentForm
+						type='create'
+						userId={userId}
+						patientId={patient.$id}
+						doctor={patient.primaryPhysician}
+					/>
 					<div className='flex justify-between text-14-regular items-center mt-8'>
 						<p className='copyright'>
 							&copy;carepulse {new Date().getFullYear()}
