@@ -130,7 +130,21 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 				<FormControl>
 					<Select onValueChange={field.onChange} defaultValue={field.value}>
 						<SelectTrigger className='shad-select-trigger'>
-							<SelectValue placeholder={props.placeholder} />
+							<SelectValue
+								placeholder={
+									<div className='flex gap-3'>
+										{props.iconSrc && (
+											<Image
+												src={props.iconSrc}
+												height={24}
+												width={24}
+												alt='icon'
+											/>
+										)}
+										{props.placeholder}
+									</div>
+								}
+							/>
 						</SelectTrigger>
 						<SelectContent className='shad-select-content'>
 							<SelectGroup>{props.children}</SelectGroup>
