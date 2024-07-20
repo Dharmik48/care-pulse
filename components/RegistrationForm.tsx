@@ -56,10 +56,7 @@ const RegistrationForm = () => {
 				<p className='text-dark-700'>Get Started with Appointments.</p>
 			</div>
 			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(() => console.log('hi'))}
-					className='space-y-6'
-				>
+				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
 					<CustomFormField
 						control={form.control}
 						fieldType={FormFieldTypes.TEXT}
