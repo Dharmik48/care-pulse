@@ -1,4 +1,4 @@
-import RegisterForm from '@/components/RegisterForm'
+import PatientForm from '@/components/PatientForm'
 import { getUser } from '@/lib/actions/patient.actions'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -17,7 +17,7 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
 						className='mb-12 h-10 w-max'
 						alt='Care pulse logo'
 					/>
-					<RegisterForm user={user} />
+					<PatientForm user={user} />
 					<p className='copyright py-8'>
 						&copy;carepulse {new Date().getFullYear()}
 					</p>

@@ -1,4 +1,4 @@
-import PatientForm from '@/components/PatientForm'
+import RegistrationForm from '@/components/RegistrationForm'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -15,7 +15,7 @@ export default function Home() {
 						className='mb-12 h-10 w-max'
 						alt='Care pulse logo'
 					/>
-					<PatientForm />
+					<RegistrationForm />
 					<div className='flex justify-between text-14-regular items-center mt-8'>
 						<p className='copyright'>
 							&copy;carepulse {new Date().getFullYear()}

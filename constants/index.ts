@@ -12,12 +12,11 @@ export enum FormFieldTypes {
 }
 
 export const PatientFormDefaultValues = {
-	firstName: '',
-	lastName: '',
+	name: '',
 	email: '',
 	phone: '',
 	birthDate: new Date(Date.now()),
-	gender: 'Male' as Gender,
+	gender: 'male' as Gender,
 	address: '',
 	occupation: '',
 	emergencyContactName: '',
@@ -26,7 +25,7 @@ export const PatientFormDefaultValues = {
 	insuranceProvider: '',
 	insurancePolicyNumber: '',
 	allergies: '',
-	currentMedication: '',
+	currentMedications: '',
 	familyMedicalHistory: '',
 	pastMedicalHistory: '',
 	identificationType: 'Birth Certificate',
