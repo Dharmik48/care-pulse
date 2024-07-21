@@ -1,3 +1,4 @@
+import { Appointment } from '@/types/appwrite.types'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -74,4 +75,12 @@ export function encryptKey(passkey: string) {
 
 export function decryptKey(passkey: string) {
 	return atob(passkey)
+}
+
+export function calculateStatCount(appointments: Appointment[]) {
+	const initCounts = { pending: 0, cancelled: 0, scheduled: 0 }
+
+	appointments.forEach(appointment => initCounts[appointment.status]++)
+
+	return initCounts
 }

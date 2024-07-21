@@ -1,8 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import StatCard from '@/components/StatCard'
+import { getAppointments } from '@/lib/actions/appointment.actions'
+import { calculateStatCount } from '@/lib/utils'
 
-const Admin = () => {
+const Admin = async () => {
+	const appointmentsList = await getAppointments()
+	const statCounts = calculateStatCount(appointmentsList.documents)
+
 	return (
 		<div className='mx-auto flex max-w-7xl flex-col space-y-14'>
 			<header className='admin-header'>
@@ -29,21 +34,21 @@ const Admin = () => {
 				<section className='admin-stat'>
 					<StatCard
 						type='appointments'
-						label='Total number of scheduled appointments'
+						label='Scheduled appointments'
 						icon='/assets/icons/appointments.svg'
-						count={90}
+						count={statCounts.scheduled}
 					/>
 					<StatCard
 						type='pending'
-						label='Total number of pending appointments'
+						label='Pending appointments'
 						icon='/assets/icons/pending.svg'
-						count={90}
+						count={statCounts.pending}
 					/>
 					<StatCard
 						type='cancelled'
-						label='Total number of cancelled appointments'
+						label='Cancelled appointments'
 						icon='/assets/icons/cancelled.svg'
-						count={90}
+						count={statCounts.cancelled}
 					/>
 				</section>
 			</main>
