@@ -1,12 +1,15 @@
+import PasskeyModal from '@/components/PasskeyModal'
 import RegistrationForm from '@/components/RegistrationForm'
-import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Home({ searchParams }: SearchParamProps) {
+	const isAdmin = searchParams.admin === 'true'
+
 	return (
 		<main className='flex max-h-screen h-screen'>
 			<div className='container my-auto h-[90%]'>
+				{isAdmin && <PasskeyModal />}
 				<section className='sub-container max-w-[496px] justify-between h-full'>
 					<Image
 						src={'/assets/icons/logo-full.svg'}

@@ -12,8 +12,6 @@ export const createAppointment = async (
 	appointmentData: CreateAppointmentParams
 ) => {
 	try {
-		console.log(DATABASE_ID)
-
 		const appointment = await databases.createDocument(
 			DATABASE_ID!,
 			APPOINTMENT_COLLECTION_ID!,
