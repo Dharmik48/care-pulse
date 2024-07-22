@@ -11,7 +11,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '../ui/button'
-import { MoreHorizontal } from 'lucide-react'
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
 import { formatDateTime } from '@/lib/utils'
 import { StatusBadge } from '../StatusBadge'
 import { Doctors } from '@/constants'
@@ -22,8 +22,24 @@ import AppointmentModal from '../AppointmentModal'
 
 export const columns: ColumnDef<Appointment>[] = [
 	{
-		header: 'ID',
+		accessorKey: 'id',
+		header: ({ column }) => (
+			<Button
+				variant={'ghost'}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+				className='pl-0 hover:underline'
+			>
+				ID
+				<ArrowUpDown size={16} className='ml-2' />
+			</Button>
+		),
 		cell: ({ row }) => <p className='text-14-medium'>{row.index + 1}</p>,
+		sortingFn: (rowA, rowB, columnId) =>
+			rowA.index > rowB.index
+				? 1
+				: rowA.index < rowB.original[columnId]
+				? -1
+				: 0,
 	},
 	{
 		accessorKey: 'patient',
@@ -34,12 +50,22 @@ export const columns: ColumnDef<Appointment>[] = [
 	},
 	{
 		accessorKey: 'schedule',
-		header: 'Date',
+		header: ({ column }) => (
+			<Button
+				variant={'ghost'}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+				className='pl-0 hover:underline'
+			>
+				Date
+				<ArrowUpDown size={16} className='ml-2' />
+			</Button>
+		),
 		cell: ({ row }) => (
 			<p className='text-14-medium'>
 				{formatDateTime(row.getValue('schedule')).dateTime}
 			</p>
 		),
+		sortingFn: 'datetime',
 	},
 	{
 		accessorKey: 'status',

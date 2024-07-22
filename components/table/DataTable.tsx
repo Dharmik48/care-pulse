@@ -3,11 +3,13 @@
 import {
 	ColumnDef,
 	ColumnFiltersState,
+	SortingState,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	useReactTable,
 	getPaginationRowModel,
+	getSortedRowModel,
 } from '@tanstack/react-table'
 
 import {
@@ -27,10 +29,9 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { FormFieldTypes, StatusOptions } from '@/constants'
-import { ChevronDown, Dot, Filter, Stethoscope } from 'lucide-react'
+import { StatusOptions } from '@/constants'
+import { Dot, Filter, Stethoscope } from 'lucide-react'
 import { Input } from '../ui/input'
-import CustomFormField from '../CustomFormField'
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
@@ -42,6 +43,8 @@ export function DataTable<TData, TValue>({
 	data,
 }: DataTableProps<TData, TValue>) {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+	const [sorting, setSorting] = useState<SortingState>([])
+
 	const [filteredStatus, setFilteredStatus] = useState<Status[]>([
 		'cancelled',
 		'pending',
@@ -54,7 +57,10 @@ export function DataTable<TData, TValue>({
 		getPaginationRowModel: getPaginationRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		onSortingChange: setSorting,
 		state: {
+			sorting,
 			columnFilters,
 		},
 	})
