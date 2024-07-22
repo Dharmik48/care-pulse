@@ -27,8 +27,10 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { StatusOptions } from '@/constants'
-import { ChevronDown, Filter } from 'lucide-react'
+import { FormFieldTypes, StatusOptions } from '@/constants'
+import { ChevronDown, Dot, Filter, Stethoscope } from 'lucide-react'
+import { Input } from '../ui/input'
+import CustomFormField from '../CustomFormField'
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
@@ -63,14 +65,39 @@ export function DataTable<TData, TValue>({
 
 	return (
 		<div className='z-10 w-full space-y-4'>
-			<div>
+			<div className='flex items-center'>
+				<div className='flex rounded-md border border-dark-500 bg-dark-400 items-center'>
+					<Stethoscope size={20} className='ml-3' />
+					<Input
+						placeholder='Search Doctor'
+						value={
+							(table
+								.getColumn('primaryPhysician')
+								?.getFilterValue() as string) ?? ''
+						}
+						onChange={event =>
+							table
+								.getColumn('primaryPhysician')
+								?.setFilterValue(event.target.value)
+						}
+						className='shad-input border-0'
+					/>
+				</div>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button
 							variant='outline'
 							className='ml-auto !flex gap-1 shad-select-trigger'
 						>
-							<Filter size={16} />
+							<div className='relative'>
+								{filteredStatus.length !== 3 && (
+									<Dot
+										className='text-green-500 absolute right-0 top-0 translate-x-1/2 -translate-y-1/2'
+										size={32}
+									/>
+								)}
+								<Filter size={16} />
+							</div>
 							<span>Status</span>
 						</Button>
 					</DropdownMenuTrigger>
@@ -101,21 +128,6 @@ export function DataTable<TData, TValue>({
 						})}
 					</DropdownMenuContent>
 				</DropdownMenu>
-				{/* <Select
-					value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
-					onValueChange={value =>
-						table.getColumn('status')?.setFilterValue(value)
-					}
-				>
-					<SelectTrigger className='shad-select-trigger ml-auto'>
-						<SelectValue placeholder='Filter status' />
-					</SelectTrigger>
-					<SelectContent className='shad-select-content'>
-						<SelectItem value='pending'>Pending</SelectItem>
-						<SelectItem value='scheduled'>Scheduled</SelectItem>
-						<SelectItem value='cancelled'>Cancelled</SelectItem>
-					</SelectContent>
-				</Select> */}
 			</div>
 
 			<div className='data-table'>
