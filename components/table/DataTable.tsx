@@ -28,7 +28,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { StatusOptions } from '@/constants'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Filter } from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
@@ -68,10 +68,10 @@ export function DataTable<TData, TValue>({
 					<DropdownMenuTrigger asChild>
 						<Button
 							variant='outline'
-							className='ml-auto !flex shad-select-trigger'
+							className='ml-auto !flex gap-1 shad-select-trigger'
 						>
+							<Filter size={16} />
 							<span>Status</span>
-							<ChevronDown size={24} />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end' className='shad-select-content'>
