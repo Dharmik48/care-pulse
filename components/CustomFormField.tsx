@@ -40,6 +40,7 @@ interface Props {
 	className?: string
 	children?: React.ReactNode
 	dateFormat?: string
+	disabled?: boolean
 }
 
 const RenderField = ({ field, props }: { field: any; props: Props }) => {
@@ -180,6 +181,7 @@ const CustomFormField = (props: Props) => {
 		<FormField
 			control={control}
 			name={name}
+			disabled={props.disabled}
 			render={({ field }) => (
 				<FormItem className={cn('flex-1', className)}>
 					{fieldType !== FormFieldTypes.CHECKBOX && label && (

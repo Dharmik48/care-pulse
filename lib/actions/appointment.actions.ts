@@ -7,6 +7,8 @@ import {
 } from '../appwrite.config'
 import { ID, Query } from 'node-appwrite'
 import { parseStringify } from '../utils'
+import { Appointment } from '@/types/appwrite.types'
+import { revalidatePath } from 'next/cache'
 
 export const createAppointment = async (
 	appointmentData: CreateAppointmentParams
@@ -48,6 +50,26 @@ export const getAppointments = async () => {
 		)
 
 		return parseStringify(appointments)
+	} catch (error: any) {
+		console.log(error)
+	}
+}
+
+export const updateAppointment = async ({
+	appointmentId,
+	appointment,
+	type,
+}: UpdateAppointmentParams) => {
+	try {
+		const updateAppointment = await databases.updateDocument(
+			DATABASE_ID!,
+			APPOINTMENT_COLLECTION_ID!,
+			appointmentId,
+			appointment
+		)
+
+		revalidatePath('/admin')
+		return parseStringify(updateAppointment)
 	} catch (error: any) {
 		console.log(error)
 	}

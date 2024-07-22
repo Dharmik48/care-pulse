@@ -13,16 +13,29 @@ import { useRouter } from 'next/navigation'
 import { Doctors, FormFieldTypes } from '@/constants'
 import { SelectItem } from './ui/select'
 import Image from 'next/image'
-import { createAppointment } from '@/lib/actions/appointment.actions'
+import {
+	createAppointment,
+	updateAppointment,
+} from '@/lib/actions/appointment.actions'
+import { Appointment } from '@/types/appwrite.types'
 
 interface Props {
 	type: 'cancel' | 'create' | 'schedule'
 	userId: string
 	patientId: string
 	doctor?: string
+	appointment?: Appointment
+	setOpen?: (open: boolean) => void
 }
 
-const AppointmentForm = ({ type, patientId, userId, doctor }: Props) => {
+const AppointmentForm = ({
+	type,
+	patientId,
+	userId,
+	doctor,
+	appointment,
+	setOpen,
+}: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const router = useRouter()
 	const schema = getAppointmentSchema(type)
@@ -30,11 +43,11 @@ const AppointmentForm = ({ type, patientId, userId, doctor }: Props) => {
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			primaryPhysician: doctor || '',
-			schedule: new Date(),
-			reason: '',
-			note: '',
-			cancellationReason: '',
+			primaryPhysician: doctor || appointment?.primaryPhysician || '',
+			schedule: appointment ? new Date(appointment.schedule) : new Date(),
+			reason: appointment?.reason || '',
+			note: appointment?.reason || '',
+			cancellationReason: appointment?.cancellationReason || '',
 		},
 	})
 
@@ -85,6 +98,25 @@ const AppointmentForm = ({ type, patientId, userId, doctor }: Props) => {
 					router.push(
 						`/patients/${patientId}/new-appointment/success?appointmentId=${appointment.$id}`
 					)
+			} else {
+				if (!appointment) throw new Error('No Appointment Given')
+
+				const updatedAppointment = await updateAppointment({
+					userId,
+					appointmentId: appointment?.$id!,
+					appointment: {
+						primaryPhysician: values.primaryPhysician,
+						schedule: new Date(values.schedule),
+						status: status as Status,
+						cancellationReason: values.cancellationReason!,
+					},
+					type,
+				})
+
+				if (!updateAppointment) throw new Error('something went wrong')
+
+				setOpen && setOpen(false)
+				form.reset()
 			}
 		} catch (error) {
 			console.log(error)
@@ -95,10 +127,14 @@ const AppointmentForm = ({ type, patientId, userId, doctor }: Props) => {
 
 	return (
 		<section>
-			<div className='mb-8'>
-				<h3 className='text-4xl font-bold mb-4'>Hey there 👋</h3>
-				<p className='text-dark-700'>Request a new appointment in 10 seconds</p>
-			</div>
+			{type === 'create' && (
+				<div className='mb-8'>
+					<h3 className='text-4xl font-bold mb-4'>Hey there 👋</h3>
+					<p className='text-dark-700'>
+						Request a new appointment in 10 seconds
+					</p>
+				</div>
+			)}
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
 					{type !== 'cancel' && (
@@ -130,13 +166,18 @@ const AppointmentForm = ({ type, patientId, userId, doctor }: Props) => {
 									</SelectItem>
 								))}
 							</CustomFormField>
-							<div className='flex flex-col lg:flex-row gap-6'>
+							<div
+								className={`flex flex-col gap-6 ${
+									type === 'create' && 'lg:flex-row'
+								}`}
+							>
 								<CustomFormField
 									control={form.control}
 									name='reason'
 									placeholder='ex: Annual monthly check-up'
 									label='Reason for appointment '
 									fieldType={FormFieldTypes.TEXTAREA}
+									disabled={type === 'schedule'}
 								/>
 								<CustomFormField
 									control={form.control}
@@ -144,6 +185,7 @@ const AppointmentForm = ({ type, patientId, userId, doctor }: Props) => {
 									placeholder='ex: Prefer afternoon appointments, if possible'
 									label='Additional comments/notes'
 									fieldType={FormFieldTypes.TEXTAREA}
+									disabled={type === 'schedule'}
 								/>
 							</div>
 							<CustomFormField
