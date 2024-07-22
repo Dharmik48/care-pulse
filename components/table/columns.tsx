@@ -66,6 +66,15 @@ export const columns: ColumnDef<Appointment>[] = [
 			</p>
 		),
 		sortingFn: 'datetime',
+		filterFn: (row, columnId, filterValue) => {
+			const schedule = new Date(row.getValue('schedule')).getTime()
+			const start = filterValue.start ? filterValue.start.getTime() : 0
+			const end = filterValue.end
+				? filterValue.end.getTime()
+				: new Date().getTime()
+
+			return schedule >= start && schedule <= end
+		},
 	},
 	{
 		accessorKey: 'status',
