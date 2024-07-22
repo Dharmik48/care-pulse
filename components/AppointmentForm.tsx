@@ -46,7 +46,7 @@ const AppointmentForm = ({
 			primaryPhysician: doctor || appointment?.primaryPhysician || '',
 			schedule: appointment ? new Date(appointment.schedule) : new Date(),
 			reason: appointment?.reason || '',
-			note: appointment?.reason || '',
+			note: appointment?.note || '',
 			cancellationReason: appointment?.cancellationReason || '',
 		},
 	})
@@ -181,7 +181,7 @@ const AppointmentForm = ({
 								/>
 								<CustomFormField
 									control={form.control}
-									name='notes'
+									name='note'
 									placeholder='ex: Prefer afternoon appointments, if possible'
 									label='Additional comments/notes'
 									fieldType={FormFieldTypes.TEXTAREA}
