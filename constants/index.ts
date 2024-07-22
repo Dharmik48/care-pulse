@@ -1,5 +1,6 @@
 export const GenderOptions = ['male', 'female', 'other']
 export const StatusOptions = ['pending', 'scheduled', 'cancelled']
+export const ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000
 
 export enum FormFieldTypes {
 	TEXT = 'text',

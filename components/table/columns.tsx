@@ -2,23 +2,14 @@
 
 import { Appointment } from '@/types/appwrite.types'
 import { ColumnDef } from '@tanstack/react-table'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+
 import { Button } from '../ui/button'
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
+import { ArrowUpDown } from 'lucide-react'
 import { formatDateTime } from '@/lib/utils'
 import { StatusBadge } from '../StatusBadge'
-import { Doctors } from '@/constants'
+import { Doctors, ONE_DAY_IN_MILLIS } from '@/constants'
 import Image from 'next/image'
 import AppointmentModal from '../AppointmentModal'
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 
 export const columns: ColumnDef<Appointment>[] = [
 	{
@@ -69,9 +60,9 @@ export const columns: ColumnDef<Appointment>[] = [
 		filterFn: (row, columnId, filterValue) => {
 			const schedule = new Date(row.getValue('schedule')).getTime()
 			const start = filterValue.start ? filterValue.start.getTime() : 0
-			const end = filterValue.end
-				? filterValue.end.getTime()
-				: new Date().getTime()
+			const end = filterValue.end?.getTime() + ONE_DAY_IN_MILLIS
+
+			if (!end) return schedule >= start
 
 			return schedule >= start && schedule <= end
 		},
