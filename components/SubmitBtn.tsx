@@ -9,7 +9,11 @@ interface Props {
 
 const SubmitBtn = ({ className, children, isLoading }: Props) => {
 	return (
-		<Button type='submit' className={className ?? 'shad-primary-btn w-full'}>
+		<Button
+			type='submit'
+			className={className ?? 'shad-primary-btn w-full'}
+			disabled={isLoading}
+		>
 			{isLoading ? (
 				<>
 					<Image
