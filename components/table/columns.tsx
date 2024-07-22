@@ -45,6 +45,8 @@ export const columns: ColumnDef<Appointment>[] = [
 		accessorKey: 'status',
 		header: 'Status',
 		cell: ({ row }) => <StatusBadge status={row.getValue('status')} />,
+		filterFn: (row, columnId, filterValue) =>
+			filterValue.indexOf(row.getValue('status')) >= 0,
 	},
 	{
 		accessorKey: 'primaryPhysician',

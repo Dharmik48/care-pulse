@@ -1,4 +1,5 @@
 export const GenderOptions = ['male', 'female', 'other']
+export const StatusOptions = ['pending', 'scheduled', 'cancelled']
 
 export enum FormFieldTypes {
 	TEXT = 'text',
