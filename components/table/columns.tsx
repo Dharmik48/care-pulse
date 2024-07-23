@@ -101,22 +101,24 @@ export const columns: ColumnDef<Appointment>[] = [
 	{
 		accessorKey: 'actions',
 		header: 'Actions',
-		cell: ({ row }) => (
-			<div className='flex gap-4'>
-				<AppointmentModal
-					type={'schedule'}
-					patientId={row.original.patient.$id}
-					userId={row.original.userId}
-					appointment={row.original}
-				/>
-				<AppointmentModal
-					type={'cancel'}
-					patientId={row.original.patient.$id}
-					userId={row.original.userId}
-					appointment={row.original}
-					disabled={row.original.status === 'cancelled'}
-				/>
-			</div>
-		),
+		cell: ({ row }) => {
+			return (
+				<div className='flex gap-4'>
+					<AppointmentModal
+						type={'schedule'}
+						patientId={row.original.patient.$id}
+						userId={row.original.patient.userId}
+						appointment={row.original}
+					/>
+					<AppointmentModal
+						type={'cancel'}
+						patientId={row.original.patient.$id}
+						userId={row.original.patient.userId}
+						appointment={row.original}
+						disabled={row.original.status === 'cancelled'}
+					/>
+				</div>
+			)
+		},
 	},
 ]
