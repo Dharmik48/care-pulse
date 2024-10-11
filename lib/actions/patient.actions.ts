@@ -1,6 +1,6 @@
 'use server'
 
-import { ID, Query } from 'node-appwrite'
+import { Account, Client, ID, Query } from 'node-appwrite'
 import {
 	account,
 	APPWRITE_PROJECT_ID,
@@ -14,12 +14,21 @@ import {
 } from '../appwrite.config'
 import { parseStringify } from '../utils'
 import { InputFile } from 'node-appwrite/file'
+import { cookies } from 'next/headers'
 
 export const createAccount = async (user: CreateAccountParams) => {
 	try {
 		const { email, password, name } = user
 
 		const acc = await account.create(ID.unique(), email, password, name)
+		const session = await account.createEmailPasswordSession(email, password)
+
+		cookies().set('user-session', session.secret, {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: true,
+		})
 
 		return parseStringify({ account: acc })
 	} catch (e: any) {
@@ -103,5 +112,27 @@ export const getPatient = async (userId: string) => {
 		return parseStringify(patient)
 	} catch (error: any) {
 		console.log(error)
+	}
+}
+
+export async function getLoggedInUser() {
+	const client = new Client()
+		.setEndpoint(ENDPOINT!)
+		.setProject(APPWRITE_PROJECT_ID!)
+
+	try {
+		const session = cookies().get('user-session')
+		if (!session || !session.value) {
+			throw new Error('No session')
+		}
+
+		client.setSession(session.value)
+
+		const account = new Account(client)
+		const user = await account.get()
+
+		return parseStringify({ user })
+	} catch (error: any) {
+		return { error: error.message }
 	}
 }

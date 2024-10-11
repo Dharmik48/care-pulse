@@ -44,6 +44,7 @@ const RegistrationForm = () => {
 
 			if (res.error) throw new Error(res.error)
 
+			toast({ title: 'Success!', description: 'Account created successfully.' })
 			if (res.account) router.push(`/patients/${res.account.$id}/register`)
 		} catch (error: any) {
 			toast({

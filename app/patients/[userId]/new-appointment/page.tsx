@@ -2,6 +2,7 @@ import AppointmentForm from '@/components/AppointmentForm'
 import { getPatient } from '@/lib/actions/patient.actions'
 import Image from 'next/image'
 import * as Sentry from '@sentry/nextjs'
+import { account } from '@/lib/appwrite.config'
 
 const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
 	const patient = await getPatient(userId)

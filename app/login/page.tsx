@@ -1,21 +1,17 @@
-import PasskeyModal from '@/components/PasskeyModal'
-import RegistrationForm from '@/components/RegistrationForm'
-import { getLoggedInUser } from '@/lib/actions/patient.actions'
 import Image from 'next/image'
 import Link from 'next/link'
+import PatientLoginForm from './_components/PatientLoginForm'
+import { getLoggedInUser } from '@/lib/actions/patient.actions'
 import { redirect } from 'next/navigation'
 
-export default async function Home({ searchParams }: SearchParamProps) {
+const Login = async () => {
 	const { user } = await getLoggedInUser()
 
-	// if (user) return redirect(`/patients/${user.$id}/register`)
-
-	const isAdmin = searchParams.admin === 'true'
+	if (user) return redirect(`/patients/${user.$id}/register`)
 
 	return (
 		<main className='flex max-h-screen h-screen'>
 			<div className='container my-auto h-[90%]'>
-				{isAdmin && <PasskeyModal />}
 				<section className='sub-container max-w-[496px] justify-between h-full'>
 					<Image
 						src={'/assets/icons/logo-full.svg'}
@@ -24,11 +20,11 @@ export default async function Home({ searchParams }: SearchParamProps) {
 						className='mb-12 h-10 w-max'
 						alt='Care pulse logo'
 					/>
-					<RegistrationForm />
+					<PatientLoginForm />
 					<div className='mt-4'>
-						Have an account already?{' '}
+						Don&apos;t have an account?{' '}
 						<Link href={'/login'} className='text-primary underline'>
-							Login
+							Sign Up
 						</Link>
 					</div>
 					<div className='flex justify-between text-14-regular items-center mt-8'>
@@ -51,3 +47,5 @@ export default async function Home({ searchParams }: SearchParamProps) {
 		</main>
 	)
 }
+
+export default Login
