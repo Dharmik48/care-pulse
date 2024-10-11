@@ -8,20 +8,23 @@ import CustomFormField from './CustomFormField'
 import SubmitBtn from './SubmitBtn'
 import { useState } from 'react'
 import { RegistrationFormValidation } from '@/lib/validations'
-import { createUser } from '@/lib/actions/patient.actions'
+import { createAccount } from '@/lib/actions/patient.actions'
 import { useRouter } from 'next/navigation'
 import { FormFieldTypes } from '@/constants'
+import { useToast } from '@/components/hooks/use-toast'
 
 const RegistrationForm = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const router = useRouter()
+	const { toast } = useToast()
 
 	const form = useForm<z.infer<typeof RegistrationFormValidation>>({
 		resolver: zodResolver(RegistrationFormValidation),
 		defaultValues: {
 			name: '',
 			email: '',
-			phone: '',
+			password: '',
+			confirmPassword: '',
 		},
 	})
 
@@ -34,16 +37,21 @@ const RegistrationForm = () => {
 			const user = {
 				name: values.name,
 				email: values.email,
-				phone: values.phone,
+				password: values.password,
 			}
 
-			const newUser = await createUser(user)
+			const res = await createAccount(user)
 
-			if (newUser) {
-				router.push(`/patients/${newUser.$id}/register`)
-			}
-		} catch (error) {
-			console.log(error)
+			if (res.error) throw new Error(res.error)
+
+			toast({ title: 'Success!', description: 'Account created successfully.' })
+			if (res.account) router.push(`/patients/${res.account.$id}/register`)
+		} catch (error: any) {
+			toast({
+				title: 'Oh no! Something went wrong.',
+				description: error.message,
+				variant: 'destructive',
+			})
 		}
 
 		setIsLoading(false)
@@ -75,11 +83,19 @@ const RegistrationForm = () => {
 					/>
 					<CustomFormField
 						control={form.control}
-						name='phone'
-						placeholder='+00 0342 0453 34'
-						label='Phone number'
-						fieldType={FormFieldTypes.PHONE}
-						iconSrc='/assets/icons/phone.svg'
+						name='password'
+						placeholder='********'
+						label='Password'
+						fieldType={FormFieldTypes.PASSWORD}
+						iconSrc='/assets/icons/key.svg'
+					/>
+					<CustomFormField
+						control={form.control}
+						name='confirmPassword'
+						placeholder='********'
+						label='Confirm Password'
+						fieldType={FormFieldTypes.PASSWORD}
+						iconSrc='/assets/icons/key.svg'
 					/>
 					<SubmitBtn isLoading={isLoading}>Get Started</SubmitBtn>
 				</form>

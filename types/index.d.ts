@@ -8,6 +8,12 @@ declare type SearchParamProps = {
 declare type Gender = 'male' | 'female' | 'other'
 declare type Status = 'pending' | 'scheduled' | 'cancelled'
 
+declare interface CreateAccountParams {
+	name: string
+	email: string
+	password: string
+}
+
 declare interface CreateUserParams {
 	name: string
 	email: string
