@@ -1,12 +1,33 @@
 import { z } from 'zod'
 
-export const RegistrationFormValidation = z.object({
-	name: z.string().min(2, { message: 'Username must be atleat 2 characters.' }),
-	email: z.string().email('Enter a valid email.'),
-	phone: z
-		.string()
-		.refine(phone => /^\+\d{10,15}$/.test(phone), 'Invalid phone number.'),
-})
+export const RegistrationFormValidation = z
+	.object({
+		name: z
+			.string()
+			.min(2, { message: 'Username must be atleat 2 characters.' }),
+		email: z.string().email('Enter a valid email.'),
+		password: z
+			.string()
+			.min(8, { message: 'Must be atleast 8 characters.' })
+			.max(20, { message: 'Cannot be more than 20 characters.' })
+			.refine(password => /[A-Z]/.test(password), {
+				message: 'Must contain atleast 1 uppercase character.',
+			})
+			.refine(password => /[a-z]/.test(password), {
+				message: 'Must contain atleast 1 lowercase character.',
+			})
+			.refine(password => /[0-9]/.test(password), {
+				message: 'Must contain atleast 1 number.',
+			})
+			.refine(password => /[!@#$%^&*]/.test(password), {
+				message: 'Must contain atleast 1 number',
+			}),
+		confirmPassword: z.string(),
+	})
+	.refine(data => data.password === data.confirmPassword, {
+		message: 'Passwords do not match',
+		path: ['confirmPassword'],
+	})
 
 export const PatientFormValidation = z.object({
 	name: z

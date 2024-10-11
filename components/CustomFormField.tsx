@@ -95,6 +95,20 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 					</FormControl>
 				</div>
 			)
+		case FormFieldTypes.PASSWORD:
+			return (
+				<div className='flex rounded-md border border-dark-500 bg-dark-400'>
+					{icon}
+					<FormControl>
+						<Input
+							type='password'
+							className='shad-input border-0'
+							placeholder={props.placeholder}
+							{...field}
+						/>
+					</FormControl>
+				</div>
+			)
 		case FormFieldTypes.PHONE:
 			return (
 				<FormControl>

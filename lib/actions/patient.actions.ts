@@ -2,6 +2,7 @@
 
 import { ID, Query } from 'node-appwrite'
 import {
+	account,
 	APPWRITE_PROJECT_ID,
 	BUCKET_ID,
 	DATABASE_ID,
@@ -14,6 +15,19 @@ import {
 import { parseStringify } from '../utils'
 import { InputFile } from 'node-appwrite/file'
 
+export const createAccount = async (user: CreateAccountParams) => {
+	try {
+		const { email, password, name } = user
+
+		const acc = await account.create(ID.unique(), email, password, name)
+
+		return parseStringify({ account: acc })
+	} catch (e: any) {
+		return parseStringify({ error: e.message || 'Something went wrong' })
+	}
+}
+
+// TODO delete this function
 export const createUser = async (user: CreateUserParams) => {
 	try {
 		const newUser = await users.create(
