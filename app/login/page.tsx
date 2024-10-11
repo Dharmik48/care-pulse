@@ -1,14 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import PatientLoginForm from './_components/PatientLoginForm'
-import { getLoggedInUser } from '@/lib/actions/patient.actions'
-import { redirect } from 'next/navigation'
 
 const Login = async () => {
-	const { user } = await getLoggedInUser()
-
-	if (user) return redirect(`/patients/${user.$id}/register`)
-
 	return (
 		<main className='flex max-h-screen h-screen'>
 			<div className='container my-auto h-[90%]'>

@@ -1,15 +1,9 @@
 import PasskeyModal from '@/components/PasskeyModal'
 import RegistrationForm from '@/components/RegistrationForm'
-import { getLoggedInUser } from '@/lib/actions/patient.actions'
 import Image from 'next/image'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 
 export default async function Home({ searchParams }: SearchParamProps) {
-	const { user } = await getLoggedInUser()
-
-	// if (user) return redirect(`/patients/${user.$id}/register`)
-
 	const isAdmin = searchParams.admin === 'true'
 
 	return (
@@ -35,8 +29,8 @@ export default async function Home({ searchParams }: SearchParamProps) {
 						<p className='copyright'>
 							&copy;carepulse {new Date().getFullYear()}
 						</p>
-						<Link href={'/?admin=true'} className='text-green-500'>
-							Admin
+						<Link href={'/?doctor=true'} className='text-green-500'>
+							Are you a doctor?
 						</Link>
 					</div>
 				</section>
