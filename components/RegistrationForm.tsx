@@ -11,10 +11,12 @@ import { RegistrationFormValidation } from '@/lib/validations'
 import { createAccount } from '@/lib/actions/patient.actions'
 import { useRouter } from 'next/navigation'
 import { FormFieldTypes } from '@/constants'
+import { useToast } from '@/components/hooks/use-toast'
 
 const RegistrationForm = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const router = useRouter()
+	const { toast } = useToast()
 
 	const form = useForm<z.infer<typeof RegistrationFormValidation>>({
 		resolver: zodResolver(RegistrationFormValidation),
@@ -43,8 +45,12 @@ const RegistrationForm = () => {
 			if (res.error) throw new Error(res.error)
 
 			if (res.account) router.push(`/patients/${res.account.$id}/register`)
-		} catch (error) {
-			console.log(error)
+		} catch (error: any) {
+			toast({
+				title: 'Oh no! Something went wrong.',
+				description: error.message,
+				variant: 'destructive',
+			})
 		}
 
 		setIsLoading(false)
