@@ -4,7 +4,11 @@ import { getLoggedInUser } from './lib/actions/patient.actions'
 export async function middleware(request: NextRequest) {
 	const { user, error } = await getLoggedInUser()
 
-	if (!user && !request.nextUrl.pathname.startsWith('/login')) {
+	if (
+		!user &&
+		!request.nextUrl.pathname.startsWith('/login') &&
+		request.nextUrl.pathname !== '/'
+	) {
 		return Response.redirect(new URL('/login', request.url))
 	}
 }

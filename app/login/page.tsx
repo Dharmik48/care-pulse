@@ -23,7 +23,7 @@ const Login = async () => {
 					<PatientLoginForm />
 					<div className='mt-4'>
 						Don&apos;t have an account?{' '}
-						<Link href={'/login'} className='text-primary underline'>
+						<Link href={'/'} className='text-primary underline'>
 							Sign Up
 						</Link>
 					</div>
