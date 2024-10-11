@@ -1,9 +1,11 @@
 'use client'
 
 import CustomFormField from '@/components/CustomFormField'
+import { useToast } from '@/components/hooks/use-toast'
 import SubmitBtn from '@/components/SubmitBtn'
 import { Form } from '@/components/ui/form'
 import { FormFieldTypes } from '@/constants'
+import { loginUser } from '@/lib/actions/patient.actions'
 import { account } from '@/lib/appwrite.config'
 import { LoginFormValidation } from '@/lib/validations'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -13,6 +15,7 @@ import { z } from 'zod'
 
 const PatientLoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false)
+	const { toast } = useToast()
 
 	const form = useForm<z.infer<typeof LoginFormValidation>>({
 		resolver: zodResolver(LoginFormValidation),
@@ -23,13 +26,21 @@ const PatientLoginForm = () => {
 	})
 
 	const onSubmit = async (values: z.infer<typeof LoginFormValidation>) => {
+		setIsLoading(true)
 		const { email, password } = values
 
 		try {
-			const res = await account.createEmailPasswordSession(email, password)
-			console.log(res)
+			const { error } = await loginUser(email, password)
+
+			if (error) throw new Error(error)
 		} catch (error: any) {
-			console.log(error)
+			toast({
+				title: 'Oh no! Something went wrong.',
+				description: error.message,
+				variant: 'destructive',
+			})
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -57,7 +68,7 @@ const PatientLoginForm = () => {
 						fieldType={FormFieldTypes.PASSWORD}
 						iconSrc='/assets/icons/key.svg'
 					/>
-					<SubmitBtn isLoading={isLoading}>Get Started</SubmitBtn>
+					<SubmitBtn isLoading={isLoading}>Login</SubmitBtn>
 				</form>
 			</Form>
 		</section>

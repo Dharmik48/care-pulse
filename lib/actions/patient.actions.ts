@@ -115,7 +115,7 @@ export const getPatient = async (userId: string) => {
 	}
 }
 
-export async function getLoggedInUser() {
+export const getLoggedInUser = async () => {
 	const client = new Client()
 		.setEndpoint(ENDPOINT!)
 		.setProject(APPWRITE_PROJECT_ID!)
@@ -134,5 +134,22 @@ export async function getLoggedInUser() {
 		return parseStringify({ user })
 	} catch (error: any) {
 		return { error: error.message }
+	}
+}
+
+export const loginUser = async (email: string, password: string) => {
+	try {
+		const session = await account.createEmailPasswordSession(email, password)
+
+		cookies().set('user-session', session.secret, {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: true,
+		})
+
+		return parseStringify({ error: null })
+	} catch (e: any) {
+		return parseStringify({ error: e.message || 'Something went wrong' })
 	}
 }
