@@ -42,7 +42,7 @@ declare interface RegisterUserParams extends CreateUserParams {
 	identificationType: string | undefined
 	identificationNumber: string | undefined
 	identificationDocument: FormData | undefined
-	privacyConsent: boolean
+	privacy: boolean
 }
 
 declare type CreateAppointmentParams = {

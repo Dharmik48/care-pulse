@@ -25,6 +25,7 @@ export async function middleware(request: NextRequest) {
 
 		return Response.redirect(new URL(url, request.url))
 	}
+	// TODO add /doctor and /patient check
 }
 
 export const config = {

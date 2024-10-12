@@ -22,10 +22,11 @@ import Image from 'next/image'
 import FileUploader from './FileUploader'
 import { useRouter } from 'next/navigation'
 import { registerUser } from '@/lib/actions/patient.actions'
+import { useToast } from './hooks/use-toast'
 
 const PatientForm = ({ user }: { user: User }) => {
 	const [isLoading, setIsLoading] = useState(false)
-	const router = useRouter()
+	const { toast } = useToast()
 
 	const form = useForm<z.infer<typeof PatientFormValidation>>({
 		resolver: zodResolver(PatientFormValidation),
@@ -68,8 +69,12 @@ const PatientForm = ({ user }: { user: User }) => {
 
 			const patient = await registerUser(data)
 
-			// redirect on success
-			if (patient) router.push(`/patients/${patient.$id}/new-appointment`)
+			// toast on success
+			if (patient)
+				toast({
+					title: 'Action success.',
+					description: 'Details saved successfully',
+				})
 		} catch (error) {
 			console.log(error)
 		}
@@ -83,10 +88,6 @@ const PatientForm = ({ user }: { user: User }) => {
 				className='flex-1 space-y-12'
 				onSubmit={form.handleSubmit(onSubmit)}
 			>
-				<div className='space-y-4'>
-					<h2 className='header'>Welcome👋🏻,</h2>
-					<p className='text-dark-700'>Let us know more about yourself.</p>
-				</div>
 				{/* Personal info */}
 				<section className='space-y-6'>
 					<div className='mb-8'>
@@ -343,12 +344,12 @@ const PatientForm = ({ user }: { user: User }) => {
 					/>
 					<CustomFormField
 						control={form.control}
-						name='privacyConsent'
+						name='privacy'
 						label='I acknowledge that I have reviewed and agree to the privacy policy'
 						fieldType={FormFieldTypes.CHECKBOX}
 					/>
 				</section>
-				<SubmitBtn isLoading={isLoading}>Get Started</SubmitBtn>
+				<SubmitBtn isLoading={isLoading}>Save</SubmitBtn>
 			</form>
 		</Form>
 	)
