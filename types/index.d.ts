@@ -12,6 +12,7 @@ declare interface CreateAccountParams {
 	name: string
 	email: string
 	password: string
+	doctor: boolean
 }
 
 declare interface CreateUserParams {

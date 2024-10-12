@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import PatientLoginForm from './_components/PatientLoginForm'
+import LoginForm from './_components/LoginForm'
 
 const Login = async () => {
 	return (
@@ -14,7 +14,7 @@ const Login = async () => {
 						className='mb-12 h-10 w-max'
 						alt='Care pulse logo'
 					/>
-					<PatientLoginForm />
+					<LoginForm />
 					<div className='mt-4'>
 						Don&apos;t have an account?{' '}
 						<Link href={'/'} className='text-primary underline'>
@@ -25,9 +25,6 @@ const Login = async () => {
 						<p className='copyright'>
 							&copy;carepulse {new Date().getFullYear()}
 						</p>
-						<Link href={'/?admin=true'} className='text-green-500'>
-							Admin
-						</Link>
 					</div>
 				</section>
 			</div>

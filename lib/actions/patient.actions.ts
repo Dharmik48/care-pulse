@@ -18,10 +18,13 @@ import { cookies } from 'next/headers'
 
 export const createAccount = async (user: CreateAccountParams) => {
 	try {
-		const { email, password, name } = user
+		const { email, password, name, doctor } = user
 
 		const acc = await account.create(ID.unique(), email, password, name)
 		const session = await account.createEmailPasswordSession(email, password)
+
+		const label = doctor ? 'doctor' : 'patient'
+		await users.updateLabels(acc.$id, [label])
 
 		cookies().set('user-session', session.secret, {
 			path: '/',

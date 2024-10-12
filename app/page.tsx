@@ -4,12 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export default async function Home({ searchParams }: SearchParamProps) {
-	const isAdmin = searchParams.admin === 'true'
+	const isDoctor = searchParams.doctor === 'true'
 
 	return (
 		<main className='flex max-h-screen h-screen'>
 			<div className='container my-auto h-[90%]'>
-				{isAdmin && <PasskeyModal />}
+				{/* {isAdmin && <PasskeyModal />} */}
 				<section className='sub-container max-w-[496px] justify-between h-full'>
 					<Image
 						src={'/assets/icons/logo-full.svg'}
@@ -18,20 +18,35 @@ export default async function Home({ searchParams }: SearchParamProps) {
 						className='mb-12 h-10 w-max'
 						alt='Care pulse logo'
 					/>
-					<RegistrationForm />
+					<RegistrationForm isDoctor={isDoctor} />
 					<div className='mt-4'>
 						Have an account already?{' '}
-						<Link href={'/login'} className='text-primary underline'>
-							Login
-						</Link>
+						{isDoctor ? (
+							<Link
+								href={'/login?doctor=true'}
+								className='text-primary underline'
+							>
+								Login
+							</Link>
+						) : (
+							<Link href={'/login'} className='text-primary underline'>
+								Login
+							</Link>
+						)}
 					</div>
 					<div className='flex justify-between text-14-regular items-center mt-8'>
 						<p className='copyright'>
 							&copy;carepulse {new Date().getFullYear()}
 						</p>
-						<Link href={'/?doctor=true'} className='text-green-500'>
-							Are you a doctor?
-						</Link>
+						{isDoctor ? (
+							<Link href={'/'} className='text-green-500'>
+								Not a doctor?
+							</Link>
+						) : (
+							<Link href={'/?doctor=true'} className='text-green-500'>
+								Are you a doctor?
+							</Link>
+						)}
 					</div>
 				</section>
 			</div>
