@@ -96,7 +96,7 @@ const AppointmentForm = ({
 
 				if (appointment)
 					router.push(
-						`/patients/${patientId}/new-appointment/success?appointmentId=${appointment.$id}`
+						`/patient/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
 					)
 			} else {
 				if (!appointment) throw new Error('No Appointment Given')
