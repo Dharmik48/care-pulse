@@ -12,6 +12,7 @@ declare interface CreateAccountParams {
 	name: string
 	email: string
 	password: string
+	doctor: boolean
 }
 
 declare interface CreateUserParams {
@@ -41,7 +42,7 @@ declare interface RegisterUserParams extends CreateUserParams {
 	identificationType: string | undefined
 	identificationNumber: string | undefined
 	identificationDocument: FormData | undefined
-	privacyConsent: boolean
+	privacy: boolean
 }
 
 declare type CreateAppointmentParams = {

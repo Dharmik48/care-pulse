@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 import { FormFieldTypes } from '@/constants'
 import { useToast } from '@/components/hooks/use-toast'
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ isDoctor }: { isDoctor: boolean }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const router = useRouter()
 	const { toast } = useToast()
@@ -38,6 +38,7 @@ const RegistrationForm = () => {
 				name: values.name,
 				email: values.email,
 				password: values.password,
+				doctor: isDoctor,
 			}
 
 			const res = await createAccount(user)
@@ -45,7 +46,12 @@ const RegistrationForm = () => {
 			if (res.error) throw new Error(res.error)
 
 			toast({ title: 'Success!', description: 'Account created successfully.' })
-			if (res.account) router.push(`/patients/${res.account.$id}/register`)
+
+			const url = isDoctor
+				? `/doctor/${res.account.$id}`
+				: `/patient/${res.account.$id}`
+
+			if (res.account) router.push(url)
 		} catch (error: any) {
 			toast({
 				title: 'Oh no! Something went wrong.',
@@ -97,7 +103,9 @@ const RegistrationForm = () => {
 						fieldType={FormFieldTypes.PASSWORD}
 						iconSrc='/assets/icons/key.svg'
 					/>
-					<SubmitBtn isLoading={isLoading}>Get Started</SubmitBtn>
+					<SubmitBtn isLoading={isLoading}>
+						Get Started as {isDoctor ? 'Doctor' : 'Patient'}
+					</SubmitBtn>
 				</form>
 			</Form>
 		</section>

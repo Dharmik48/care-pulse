@@ -5,17 +5,19 @@ import { useToast } from '@/components/hooks/use-toast'
 import SubmitBtn from '@/components/SubmitBtn'
 import { Form } from '@/components/ui/form'
 import { FormFieldTypes } from '@/constants'
-import { loginUser } from '@/lib/actions/patient.actions'
-import { account } from '@/lib/appwrite.config'
+import { getLoggedInUser, loginUser } from '@/lib/actions/patient.actions'
 import { LoginFormValidation } from '@/lib/validations'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { Models } from 'node-appwrite'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const PatientLoginForm = () => {
+const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const { toast } = useToast()
+	const router = useRouter()
 
 	const form = useForm<z.infer<typeof LoginFormValidation>>({
 		resolver: zodResolver(LoginFormValidation),
@@ -31,8 +33,9 @@ const PatientLoginForm = () => {
 
 		try {
 			const { error } = await loginUser(email, password)
-
 			if (error) throw new Error(error)
+
+			router.replace('/login')
 		} catch (error: any) {
 			toast({
 				title: 'Oh no! Something went wrong.',
@@ -75,4 +78,4 @@ const PatientLoginForm = () => {
 	)
 }
 
-export default PatientLoginForm
+export default LoginForm

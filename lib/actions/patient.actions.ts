@@ -18,10 +18,13 @@ import { cookies } from 'next/headers'
 
 export const createAccount = async (user: CreateAccountParams) => {
 	try {
-		const { email, password, name } = user
+		const { email, password, name, doctor } = user
 
 		const acc = await account.create(ID.unique(), email, password, name)
 		const session = await account.createEmailPasswordSession(email, password)
+
+		const label = doctor ? 'doctor' : 'patient'
+		await users.updateLabels(acc.$id, [label])
 
 		cookies().set('user-session', session.secret, {
 			path: '/',
@@ -111,7 +114,23 @@ export const getPatient = async (userId: string) => {
 
 		return parseStringify(patient)
 	} catch (error: any) {
-		console.log(error)
+		return { error: error.message }
+	}
+}
+
+export const getPatientByUserId = async (userId: string) => {
+	try {
+		const res = await databases.listDocuments(
+			DATABASE_ID!,
+			PATIENT_COLLECTION_ID!,
+			[Query.startsWith('userId', userId)]
+		)
+
+		if (res.documents.length === 0) return parseStringify({ patient: null })
+
+		return parseStringify({ patient: res.documents[0] })
+	} catch (error: any) {
+		return { error: error.message }
 	}
 }
 

@@ -114,12 +114,13 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 				<FormControl>
 					<PhoneInput
 						defaultCountry='IN'
-						className='input-phone'
+						className='input-phone has-[:disabled]:opacity-50'
 						international={true}
 						withCountryCallingCode={true}
 						placeholder={props.placeholder}
 						onChange={field.onChange}
 						value={field.value}
+						disabled={props.disabled}
 					/>
 				</FormControl>
 			)
@@ -136,6 +137,8 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 							wrapperClassName='date-picker'
 							placeholderText={props.placeholder}
 							dateFormat={props.dateFormat}
+							disabled={props.disabled}
+							className='disabled:cursor-not-allowed disabled:opacity-50'
 						/>
 					</FormControl>
 				</div>
@@ -145,7 +148,11 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 		case FormFieldTypes.SELECT:
 			return (
 				<FormControl>
-					<Select onValueChange={field.onChange} defaultValue={field.value}>
+					<Select
+						onValueChange={field.onChange}
+						defaultValue={field.value}
+						disabled={props.disabled}
+					>
 						<SelectTrigger className='shad-select-trigger'>
 							<SelectValue
 								placeholder={
@@ -178,6 +185,7 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 							name={field.name}
 							checked={field.value}
 							onCheckedChange={field.onChange}
+							disabled={props.disabled}
 						/>
 						<FormLabel htmlFor={field.name} className='checkbox-label'>
 							{props.label}

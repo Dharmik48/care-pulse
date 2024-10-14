@@ -22,19 +22,29 @@ import Image from 'next/image'
 import FileUploader from './FileUploader'
 import { useRouter } from 'next/navigation'
 import { registerUser } from '@/lib/actions/patient.actions'
+import { useToast } from './hooks/use-toast'
+import { Patient } from '@/types/appwrite.types'
 
-const PatientForm = ({ user }: { user: User }) => {
+const PatientForm = ({
+	user,
+	patient,
+}: {
+	user: User
+	patient: null | Patient
+}) => {
 	const [isLoading, setIsLoading] = useState(false)
-	const router = useRouter()
+	const { toast } = useToast()
 
 	const form = useForm<z.infer<typeof PatientFormValidation>>({
 		resolver: zodResolver(PatientFormValidation),
-		defaultValues: {
-			...PatientFormDefaultValues,
-			name: user.name || '',
-			email: user.email || '',
-			phone: user.phone || '',
-		},
+		defaultValues: patient
+			? { ...patient, identificationDocument: [] }
+			: {
+					...PatientFormDefaultValues,
+					name: user.name || '',
+					email: user.email || '',
+					phone: user.phone || '',
+			  },
 	})
 
 	const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
@@ -68,8 +78,12 @@ const PatientForm = ({ user }: { user: User }) => {
 
 			const patient = await registerUser(data)
 
-			// redirect on success
-			if (patient) router.push(`/patients/${patient.$id}/new-appointment`)
+			// toast on success
+			if (patient)
+				toast({
+					title: 'Action success.',
+					description: 'Details saved successfully',
+				})
 		} catch (error) {
 			console.log(error)
 		}
@@ -83,10 +97,6 @@ const PatientForm = ({ user }: { user: User }) => {
 				className='flex-1 space-y-12'
 				onSubmit={form.handleSubmit(onSubmit)}
 			>
-				<div className='space-y-4'>
-					<h2 className='header'>Welcome👋🏻,</h2>
-					<p className='text-dark-700'>Let us know more about yourself.</p>
-				</div>
 				{/* Personal info */}
 				<section className='space-y-6'>
 					<div className='mb-8'>
@@ -98,6 +108,7 @@ const PatientForm = ({ user }: { user: User }) => {
 						name='name'
 						placeholder='ex: John Doe'
 						label='Full name'
+						disabled={!!patient}
 					/>
 					{/* Email and phone */}
 					<div className='flex flex-col lg:flex-row gap-6'>
@@ -108,6 +119,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							label='Email address'
 							fieldType={FormFieldTypes.EMAIL}
 							iconSrc='/assets/icons/email.svg'
+							disabled={!!patient}
 						/>
 						<CustomFormField
 							control={form.control}
@@ -115,6 +127,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder='+00 0342 0453 34'
 							label='Phone number'
 							fieldType={FormFieldTypes.PHONE}
+							disabled={!!patient}
 							className='lg:w-1/2'
 						/>
 					</div>
@@ -127,6 +140,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							label='Date of birth'
 							fieldType={FormFieldTypes.DATE}
 							iconSrc='/assets/icons/calendar.svg'
+							disabled={!!patient}
 						/>
 						<CustomFormField
 							control={form.control}
@@ -138,17 +152,18 @@ const PatientForm = ({ user }: { user: User }) => {
 									onChange={field.onChange}
 									defaultValue={field.value}
 									className='flex h-11 gap-4 lg:justify-between'
+									disabled={!!patient}
 								>
 									{GenderOptions.map(gender => (
 										<div key={gender} className='radio-group'>
 											<RadioGroupItem
-												className='h-auto'
+												className='h-auto peer'
 												value={gender}
 												id={gender}
 											/>
 											<Label
 												htmlFor={gender}
-												className='cursor-pointer capitalize w-full'
+												className='cursor-pointer capitalize w-full peer-disabled:cursor-not-allowed'
 											>
 												{gender}
 											</Label>
@@ -166,6 +181,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							name='address'
 							placeholder='ex: 14 street, Delhi'
 							label='Address'
+							disabled={!!patient}
 						/>
 						<CustomFormField
 							control={form.control}
@@ -173,6 +189,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							name='occupation'
 							placeholder='ex: Engineer'
 							label='Occupation'
+							disabled={!!patient}
 						/>
 					</div>
 					{/* emergency name and contact */}
@@ -183,6 +200,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder="Guardian's name"
 							label='Emergency Contact Name'
 							fieldType={FormFieldTypes.TEXT}
+							disabled={!!patient}
 						/>
 						<CustomFormField
 							control={form.control}
@@ -190,6 +208,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder='+00 0342 0453 34'
 							label='Emergency Contact Number'
 							fieldType={FormFieldTypes.PHONE}
+							disabled={!!patient}
 							className='lg:w-1/2'
 						/>
 					</div>
@@ -206,6 +225,7 @@ const PatientForm = ({ user }: { user: User }) => {
 						placeholder='Select your primary physician'
 						label='Primary Physician'
 						fieldType={FormFieldTypes.SELECT}
+						disabled={!!patient}
 					>
 						{Doctors.map(doctor => (
 							<SelectItem
@@ -234,6 +254,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder='ex: BlueCross'
 							label='Insurance Provider'
 							fieldType={FormFieldTypes.TEXT}
+							disabled={!!patient}
 						/>
 						<CustomFormField
 							control={form.control}
@@ -241,6 +262,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder='ex: ABC1234567'
 							label='Insurance Policy Number'
 							fieldType={FormFieldTypes.TEXT}
+							disabled={!!patient}
 							className='lg:w-1/2'
 						/>
 					</div>
@@ -252,6 +274,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder='ex: Peanuts, Penicillin, Pollen'
 							label='Allergies'
 							fieldType={FormFieldTypes.TEXTAREA}
+							disabled={!!patient}
 						/>
 						<CustomFormField
 							control={form.control}
@@ -259,6 +282,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder='ex: Ibuprofen 200mg, Levothyroxine 50mcg'
 							label='Current Medications'
 							fieldType={FormFieldTypes.TEXTAREA}
+							disabled={!!patient}
 							className='lg:w-1/2'
 						/>
 					</div>
@@ -270,6 +294,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder='ex: Mother had breast cancer'
 							label='Family Medical History'
 							fieldType={FormFieldTypes.TEXTAREA}
+							disabled={!!patient}
 						/>
 						<CustomFormField
 							control={form.control}
@@ -277,6 +302,7 @@ const PatientForm = ({ user }: { user: User }) => {
 							placeholder='ex: Asthma diagnosis in childhood'
 							label='Past Medical History'
 							fieldType={FormFieldTypes.TEXTAREA}
+							disabled={!!patient}
 							className='lg:w-1/2'
 						/>
 					</div>
@@ -293,6 +319,7 @@ const PatientForm = ({ user }: { user: User }) => {
 						placeholder='Select Identification Type'
 						label='Identification Type'
 						fieldType={FormFieldTypes.SELECT}
+						disabled={!!patient}
 					>
 						{IdentificationTypes.map(option => (
 							<SelectItem
@@ -310,15 +337,21 @@ const PatientForm = ({ user }: { user: User }) => {
 						placeholder='ex: 1234567'
 						label='Identification Number'
 						fieldType={FormFieldTypes.TEXT}
+						disabled={!!patient}
 					/>
 					<CustomFormField
 						control={form.control}
 						name='identificationDocument'
 						label='Scanned Copy of Identification Document'
 						fieldType={FormFieldTypes.SKELETON}
+						disabled={!!patient}
 						renderSkeleton={field => (
 							<FormControl>
-								<FileUploader files={field.value} onChange={field.onChange} />
+								<FileUploader
+									files={field.value}
+									onChange={field.onChange}
+									disabled={!!patient}
+								/>
 							</FormControl>
 						)}
 					/>
@@ -334,21 +367,24 @@ const PatientForm = ({ user }: { user: User }) => {
 						name='treatmentConsent'
 						label='I consent to receive treatment for my health condition.'
 						fieldType={FormFieldTypes.CHECKBOX}
+						disabled={!!patient}
 					/>
 					<CustomFormField
 						control={form.control}
 						name='disclosureConsent'
 						label='I consent to the use and disclosure of my health information for treatment purposes.'
 						fieldType={FormFieldTypes.CHECKBOX}
+						disabled={!!patient}
 					/>
 					<CustomFormField
 						control={form.control}
-						name='privacyConsent'
+						name='privacy'
 						label='I acknowledge that I have reviewed and agree to the privacy policy'
 						fieldType={FormFieldTypes.CHECKBOX}
+						disabled={!!patient}
 					/>
 				</section>
-				<SubmitBtn isLoading={isLoading}>Get Started</SubmitBtn>
+				{!patient && <SubmitBtn isLoading={isLoading}>Save</SubmitBtn>}
 			</form>
 		</Form>
 	)

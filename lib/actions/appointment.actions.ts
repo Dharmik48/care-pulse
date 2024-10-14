@@ -6,7 +6,7 @@ import {
 	databases,
 	messaging,
 } from '../appwrite.config'
-import { ID, Query } from 'node-appwrite'
+import { Databases, ID, Models, Query } from 'node-appwrite'
 import { formatDateTime, parseStringify } from '../utils'
 import { Appointment } from '@/types/appwrite.types'
 import { revalidatePath } from 'next/cache'
@@ -39,6 +39,20 @@ export const getAppointment = async (appointmentId: string) => {
 		return parseStringify(appointment)
 	} catch (error: any) {
 		console.log(error)
+	}
+}
+
+export const getUserAppointements = async (userId: string) => {
+	try {
+		const appointments = await databases.listDocuments(
+			DATABASE_ID!,
+			APPOINTMENT_COLLECTION_ID!,
+			[Query.equal('userId', userId)]
+		)
+
+		return { appointments: appointments.documents as Appointment[] }
+	} catch (error: any) {
+		return { error: error.message || 'Something went wrong.' }
 	}
 }
 

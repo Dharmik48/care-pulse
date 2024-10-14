@@ -1,14 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import PatientLoginForm from './_components/PatientLoginForm'
-import { getLoggedInUser } from '@/lib/actions/patient.actions'
-import { redirect } from 'next/navigation'
+import LoginForm from './_components/LoginForm'
 
 const Login = async () => {
-	const { user } = await getLoggedInUser()
-
-	if (user) return redirect(`/patients/${user.$id}/register`)
-
 	return (
 		<main className='flex max-h-screen h-screen'>
 			<div className='container my-auto h-[90%]'>
@@ -20,7 +14,7 @@ const Login = async () => {
 						className='mb-12 h-10 w-max'
 						alt='Care pulse logo'
 					/>
-					<PatientLoginForm />
+					<LoginForm />
 					<div className='mt-4'>
 						Don&apos;t have an account?{' '}
 						<Link href={'/'} className='text-primary underline'>
@@ -31,9 +25,6 @@ const Login = async () => {
 						<p className='copyright'>
 							&copy;carepulse {new Date().getFullYear()}
 						</p>
-						<Link href={'/?admin=true'} className='text-green-500'>
-							Admin
-						</Link>
 					</div>
 				</section>
 			</div>

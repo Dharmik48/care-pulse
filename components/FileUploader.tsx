@@ -8,20 +8,28 @@ import { convertFileToUrl } from '@/lib/utils'
 interface Props {
 	files: File[] | undefined
 	onChange: (files: File[]) => void
+	disabled?: boolean
 }
 
-const FileUploader = ({ files, onChange }: Props) => {
-	const onDrop = useCallback((acceptedFiles: File[]) => {
-		onChange(acceptedFiles)
-	}, [])
+const FileUploader = ({ files, onChange, disabled }: Props) => {
+	const onDrop = useCallback(
+		(acceptedFiles: File[]) => {
+			if (disabled) return
+			onChange(acceptedFiles)
+		},
+		[disabled]
+	)
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
 	return (
-		<div {...getRootProps()} className='file-upload'>
-			<input {...getInputProps()} />
+		<div
+			{...getRootProps()}
+			className='file-upload has-[:disabled]:cursor-not-allowed'
+		>
+			<input {...getInputProps()} disabled={!!disabled} />
 			{files && files.length > 0 ? (
 				<div className='relative'>
-					{isDragActive && (
+					{isDragActive && !disabled && (
 						<div className='absolute inset-0 flex items-center justify-center flex-col bg-dark-400 gap-2'>
 							<Image
 								src='/assets/icons/upload.svg'
@@ -51,7 +59,7 @@ const FileUploader = ({ files, onChange }: Props) => {
 						alt='upload icon'
 					/>
 
-					{isDragActive ? (
+					{isDragActive && !disabled ? (
 						<p>
 							<span className='text-green-400'>Drop</span> the file here ...
 						</p>

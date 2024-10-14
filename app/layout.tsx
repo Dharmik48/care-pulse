@@ -24,7 +24,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body className={cn('min-h-screen font-sans bg-dark-300', font.variable)}>
+			<body
+				className={cn('min-h-screen font-sans bg-background', font.variable)}
+			>
 				<ThemeProvider attribute='class' defaultTheme='dark'>
 					{children}
 					<Toaster />
