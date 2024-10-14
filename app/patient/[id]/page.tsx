@@ -53,7 +53,9 @@ const Patient = async ({ params }: SearchParamProps) => {
 	return (
 		<section>
 			<div className='mb-8'>
-				<h3 className='text-4xl font-bold mb-4'>Hi there👋🏻, {user.name}</h3>
+				<h3 className='text-2xl md:text-4xl font-bold mb-4'>
+					Hi there👋🏻, {user.name}
+				</h3>
 				<p className='text-dark-700 flex items-center gap-2'>
 					<Mail size={18} />
 					{user.email}
@@ -61,7 +63,7 @@ const Patient = async ({ params }: SearchParamProps) => {
 			</div>
 			<Separator className='my-6' />
 			<section className='space-y-6'>
-				<div className='mb-4 flex justify-between items-center'>
+				<div className='mb-4 flex justify-between items-center flex-wrap gap-4'>
 					<h3 className='sub-header'>Appointments</h3>
 					<Link href={`/patient/${id}/new-appointment`}>
 						<Button>
