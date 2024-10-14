@@ -77,19 +77,19 @@ const Patient = async ({ params }: SearchParamProps) => {
 							title='Scheduled'
 							emptyMessage='No scheduled appointments'
 							appointments={scheduledAppointments}
-							icon={<CalendarCheck2 size={20} />}
+							icon={<CalendarCheck2 size={20} className='text-primary' />}
 						/>
 						<AppointmentSection
 							title='Pending'
 							emptyMessage='No pending appointments'
 							appointments={pendingAppointments}
-							icon={<CalendarClock size={20} />}
+							icon={<CalendarClock size={20} className='text-cyan-400' />}
 						/>
 						<AppointmentSection
 							title='Cancelled'
 							emptyMessage='No cancelled appointments'
 							appointments={cancelledAppointments}
-							icon={<CalendarX2 size={20} />}
+							icon={<CalendarX2 size={20} className='text-destructive' />}
 						/>
 						<AppointmentSection
 							title='Past Appointments'
