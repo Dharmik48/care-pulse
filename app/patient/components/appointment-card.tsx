@@ -12,6 +12,7 @@ const AppointmentCard = ({
 	appointment: Appointment
 	showBadge?: boolean
 }) => {
+	// TODO: change pending to yellow
 	const doctor = Doctors.find(doc => doc.name === appointment.primaryPhysician)
 	return (
 		<li
