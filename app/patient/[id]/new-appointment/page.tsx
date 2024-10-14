@@ -1,9 +1,13 @@
 import AppointmentForm from '@/components/AppointmentForm'
 import { getPatientByUserId } from '@/lib/actions/patient.actions'
 import * as Sentry from '@sentry/nextjs'
+import { NoPatientDetailsAlert } from '../../components/no-patient-details-alert'
 
 const NewAppointment = async ({ params: { id } }: SearchParamProps) => {
 	const { patient } = await getPatientByUserId(id)
+
+	if (!patient) return <NoPatientDetailsAlert id={id} />
+
 	Sentry.metrics.set('user_view_new-appointment', patient.name)
 
 	return (
