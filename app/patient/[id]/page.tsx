@@ -15,6 +15,8 @@ import { NoPatientDetailsAlert } from '../components/no-patient-details-alert'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
+import { getUserAppointements } from '@/lib/actions/appointment.actions'
+import AppointmentSection from '../components/appointment-section'
 
 const Patient = async ({ params }: SearchParamProps) => {
 	const { id } = params
@@ -27,6 +29,26 @@ const Patient = async ({ params }: SearchParamProps) => {
 	if (user.$id !== id) return redirect(url)
 
 	const { patient: patientDetails } = await getPatientByUserId(id)
+	const { appointments } = await getUserAppointements(id)
+
+	const pendingAppointments = appointments?.filter(
+		appointment =>
+			appointment.status === 'pending' &&
+			new Date(appointment.schedule) >= new Date()
+	)
+	const scheduledAppointments = appointments?.filter(
+		appointment =>
+			appointment.status === 'scheduled' &&
+			new Date(appointment.schedule) >= new Date()
+	)
+	const cancelledAppointments = appointments?.filter(
+		appointment =>
+			appointment.status === 'cancelled' &&
+			new Date(appointment.schedule) >= new Date()
+	)
+	const pastAppointments = appointments?.filter(
+		appointment => new Date(appointment.schedule) < new Date()
+	)
 
 	return (
 		<section>
@@ -51,28 +73,31 @@ const Patient = async ({ params }: SearchParamProps) => {
 					<NoPatientDetailsAlert id={id} />
 				) : (
 					<div className='space-y-8'>
-						<div>
-							<h4 className='text-base md:text-lg font-bold flex items-center gap-1'>
-								<CalendarCheck2 size={20} /> Scheduled
-							</h4>
-						</div>
-						<div>
-							<h4 className='text-base md:text-lg font-bold flex items-center gap-1'>
-								<CalendarClock size={20} /> Pending
-							</h4>
-						</div>
-						<div>
-							<h4 className='text-base md:text-lg font-bold flex items-center gap-1'>
-								<CalendarX2 size={20} />
-								Cancelled
-							</h4>
-						</div>
-						<div>
-							<h4 className='text-base md:text-lg font-bold flex items-center gap-1'>
-								<CalendarDays size={20} />
-								Past Appointments
-							</h4>
-						</div>
+						<AppointmentSection
+							title='Scheduled'
+							emptyMessage='No scheduled appointments'
+							appointments={scheduledAppointments}
+							icon={<CalendarCheck2 size={20} />}
+						/>
+						<AppointmentSection
+							title='Pending'
+							emptyMessage='No pending appointments'
+							appointments={pendingAppointments}
+							icon={<CalendarClock size={20} />}
+						/>
+						<AppointmentSection
+							title='Cancelled'
+							emptyMessage='No cancelled appointments'
+							appointments={cancelledAppointments}
+							icon={<CalendarX2 size={20} />}
+						/>
+						<AppointmentSection
+							title='Past Appointments'
+							emptyMessage='No appointment history'
+							appointments={pastAppointments}
+							icon={<CalendarDays size={20} />}
+							showBadge={true}
+						/>
 					</div>
 				)}
 			</section>
