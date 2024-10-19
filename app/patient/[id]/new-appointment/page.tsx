@@ -1,28 +1,29 @@
 import AppointmentForm from '@/components/AppointmentForm'
-import { getPatientByUserId } from '@/lib/actions/patient.actions'
+import {getPatientByUserId} from '@/lib/actions/patient.actions'
 import * as Sentry from '@sentry/nextjs'
-import { NoPatientDetailsAlert } from '../../components/no-patient-details-alert'
+import {NoDetailsAlert} from "@/components/NoDetailsAlert";
 
-const NewAppointment = async ({ params: { id } }: SearchParamProps) => {
-	const { patient } = await getPatientByUserId(id)
+const NewAppointment = async ({params: {id}}: SearchParamProps) => {
+    const {patient} = await getPatientByUserId(id)
 
-	if (!patient) return <NoPatientDetailsAlert id={id} />
+    if (!patient) return <NoDetailsAlert title={'Personal Details not set!'} link={`/patient/${id}/details`}
+                                         description={'to get started with appointments!'}/>
 
-	Sentry.metrics.set('user_view_new-appointment', patient.name)
+    Sentry.metrics.set('user_view_new-appointment', patient.name)
 
-	return (
-		<section className='h-full'>
-			<AppointmentForm
-				type='create'
-				userId={id}
-				patientId={patient.$id}
-				doctor={patient.primaryPhysician}
-			/>
-			<div className='flex justify-between text-14-regular items-center mt-8'>
-				<p className='copyright'>&copy;carepulse {new Date().getFullYear()}</p>
-			</div>
-		</section>
-	)
+    return (
+        <section className='h-full'>
+            <AppointmentForm
+                type='create'
+                userId={id}
+                patientId={patient.$id}
+                doctor={patient.primaryPhysician}
+            />
+            <div className='flex justify-between text-14-regular items-center mt-8'>
+                <p className='copyright'>&copy;carepulse {new Date().getFullYear()}</p>
+            </div>
+        </section>
+    )
 }
 
 export default NewAppointment

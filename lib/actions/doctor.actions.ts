@@ -11,6 +11,7 @@ import {
 import {InputFile} from "node-appwrite/file";
 import {ID, Query} from "node-appwrite";
 import {parseStringify} from "@/lib/utils";
+import {revalidatePath} from "next/cache";
 
 export const registerDoctor = async ({licenseDocument, avatar, ...data}: RegisterDoctorParams) => {
     let uploadedLicense, uploadedAvatar
@@ -43,6 +44,8 @@ export const registerDoctor = async ({licenseDocument, avatar, ...data}: Registe
             }
         )
 
+        revalidatePath(`/doctor/${data.userId}/`)
+        revalidatePath(`/doctor/${data.userId}/appointments`)
         return parseStringify({doctor})
     } catch (error: any) {
         if (uploadedLicense) await storage.deleteFile(BUCKET_ID!, uploadedLicense.$id)
