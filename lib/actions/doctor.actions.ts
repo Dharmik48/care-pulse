@@ -76,7 +76,17 @@ export const getDoctors = async () => {
     try {
         const res = await databases.listDocuments(DATABASE_ID!, DOCTOR_COLLECTION_ID!)
 
-        return parseStringify({doctors: res.documents as Doctor[]})
+        return {doctors: res.documents as Doctor[]}
+    } catch (error: any) {
+        return {error: error.message}
+    }
+}
+
+export const getDoctor = async (id: string) => {
+    try {
+        const doctor = await databases.getDocument(DATABASE_ID!, DOCTOR_COLLECTION_ID!, id)
+
+        return {doctor: doctor as Doctor}
     } catch (error: any) {
         return {error: error.message}
     }

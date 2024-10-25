@@ -9,6 +9,7 @@ import { redirect } from 'next/navigation'
 
 import * as Sentry from '@sentry/nextjs'
 import { getUser } from '@/lib/actions/patient.actions'
+import {getDoctor} from "@/lib/actions/doctor.actions";
 
 const Success = async ({ searchParams, params }: SearchParamProps) => {
 	const appointment: Appointment = await getAppointment(
@@ -17,7 +18,7 @@ const Success = async ({ searchParams, params }: SearchParamProps) => {
 
 	if (!appointment) return redirect(`/patient/${params.id}/new-appointment`)
 
-	const doctor = Doctors.find(doc => doc.name === appointment.primaryPhysician)
+	const {doctor} = await getDoctor(appointment.primaryPhysician.$id)
 	const user = await getUser(params.id)
 
 	Sentry.metrics.set('user_view_appointment_success', user.name)
@@ -42,16 +43,19 @@ const Success = async ({ searchParams, params }: SearchParamProps) => {
 			</div>
 			<div className='border-y border-dark-500 py-8 flex flex-col gap-4 md:flex-row justify-center items-center'>
 				<p className='text-lg text-dark-700'>Requested appointment details:</p>
-				<div className='flex items-center gap-2'>
-					<Image
-						src={doctor?.image!}
-						width={50}
-						height={50}
-						alt={appointment.primaryPhysician}
-						className='size-6'
-					/>
-					<p>Dr. {appointment.primaryPhysician}</p>
-				</div>
+				{
+					doctor ?
+						<div className='flex items-center gap-2'>
+							<Image
+								src={doctor.avatar}
+								width={50}
+								height={50}
+								alt={doctor.name}
+								className='size-6 rounded-full'
+							/>
+							<p>Dr. {doctor.name}</p>
+						</div> : null
+				}
 				<div className='flex items-center gap-2'>
 					<Image
 						src={'/assets/icons/calendar.svg'}

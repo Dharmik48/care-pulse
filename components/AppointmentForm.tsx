@@ -17,7 +17,7 @@ import {
 	createAppointment,
 	updateAppointment,
 } from '@/lib/actions/appointment.actions'
-import { Appointment } from '@/types/appwrite.types'
+import {Appointment, Doctor} from '@/types/appwrite.types'
 
 interface Props {
 	type: 'cancel' | 'create' | 'schedule'
@@ -26,6 +26,7 @@ interface Props {
 	doctor?: string
 	appointment?: Appointment
 	setOpen?: (open: boolean) => void
+	doctors?: Doctor[]
 }
 
 const AppointmentForm = ({
@@ -35,6 +36,7 @@ const AppointmentForm = ({
 	doctor,
 	appointment,
 	setOpen,
+	doctors
 }: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const router = useRouter()
@@ -43,7 +45,7 @@ const AppointmentForm = ({
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			primaryPhysician: doctor || appointment?.primaryPhysician || '',
+			primaryPhysician: doctor || appointment?.primaryPhysician.$id || '',
 			schedule: appointment ? new Date(appointment.schedule) : new Date(),
 			reason: appointment?.reason || '',
 			note: appointment?.note || '',
@@ -147,15 +149,15 @@ const AppointmentForm = ({
 								fieldType={FormFieldTypes.SELECT}
 								iconSrc='/assets/icons/stethoscope.svg'
 							>
-								{Doctors.map(doctor => (
+								{doctors?.map(doctor => (
 									<SelectItem
-										key={doctor.name}
-										value={doctor.name}
+										key={doctor.$id}
+										value={doctor.$id}
 										className='cursor-pointer hover:bg-dark-500'
 									>
 										<div className='flex gap-2 items-center'>
 											<Image
-												src={doctor.image}
+												src={doctor.avatar}
 												width={32}
 												height={32}
 												alt={`${doctor.name} picture`}

@@ -13,7 +13,7 @@ const Register = async ({ params: { id } }: SearchParamProps) => {
 
 	return (
 		<section className='h-full'>
-			<PatientForm user={user} patient={patient} doctors={doctors} />
+			<PatientForm user={user} patient={patient} doctors={doctors!} />
 			<p className='copyright py-8'>
 				&copy;carepulse {new Date().getFullYear()}
 			</p>
