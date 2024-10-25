@@ -15,6 +15,7 @@ import {
 import {parseStringify} from '../utils'
 import {InputFile} from 'node-appwrite/file'
 import {cookies} from 'next/headers'
+import {revalidatePath} from "next/cache";
 
 export const createAccount = async (user: CreateAccountParams) => {
     try {
@@ -74,6 +75,8 @@ export const registerUser = async ({
                 ...user,
             }
         )
+
+        revalidatePath(`/patient/${user.userId}/details`)
 
         return parseStringify(patient)
     } catch (error: any) {

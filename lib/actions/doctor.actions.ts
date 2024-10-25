@@ -12,6 +12,7 @@ import {InputFile} from "node-appwrite/file";
 import {ID, Query} from "node-appwrite";
 import {parseStringify} from "@/lib/utils";
 import {revalidatePath} from "next/cache";
+import {Doctor} from "@/types/appwrite.types";
 
 export const registerDoctor = async ({licenseDocument, avatar, ...data}: RegisterDoctorParams) => {
     let uploadedLicense, uploadedAvatar
@@ -65,7 +66,17 @@ export const getDoctorByUserId = async (userId: string) => {
 
         if (res.documents.length === 0) return parseStringify({doctor: null})
 
-        return parseStringify({doctor: res.documents[0]})
+        return parseStringify({doctor: res.documents[0] as Doctor})
+    } catch (error: any) {
+        return {error: error.message}
+    }
+}
+
+export const getDoctors = async () => {
+    try {
+        const res = await databases.listDocuments(DATABASE_ID!, DOCTOR_COLLECTION_ID!)
+
+        return parseStringify({doctors: res.documents as Doctor[]})
     } catch (error: any) {
         return {error: error.message}
     }

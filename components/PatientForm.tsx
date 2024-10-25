@@ -10,7 +10,6 @@ import { PatientFormValidation } from '@/lib/validations'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import {
-	Doctors,
 	FormFieldTypes,
 	GenderOptions,
 	IdentificationTypes,
@@ -20,17 +19,18 @@ import { Label } from './ui/label'
 import { SelectItem } from './ui/select'
 import Image from 'next/image'
 import FileUploader from './FileUploader'
-import { useRouter } from 'next/navigation'
 import { registerUser } from '@/lib/actions/patient.actions'
 import { useToast } from './hooks/use-toast'
-import { Patient } from '@/types/appwrite.types'
+import {Doctor, Patient} from '@/types/appwrite.types'
 
 const PatientForm = ({
 	user,
 	patient,
+	doctors
 }: {
 	user: User
 	patient: null | Patient
+	doctors: Doctor[]
 }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const { toast } = useToast()
@@ -38,7 +38,7 @@ const PatientForm = ({
 	const form = useForm<z.infer<typeof PatientFormValidation>>({
 		resolver: zodResolver(PatientFormValidation),
 		defaultValues: patient
-			? { ...patient, identificationDocument: [] }
+			? { ...patient, identificationDocument: [], primaryPhysician: patient.primaryPhysician.$id }
 			: {
 					...PatientFormDefaultValues,
 					name: user.name || '',
@@ -227,15 +227,15 @@ const PatientForm = ({
 						fieldType={FormFieldTypes.SELECT}
 						disabled={!!patient}
 					>
-						{Doctors.map(doctor => (
+						{doctors.map(doctor => (
 							<SelectItem
-								key={doctor.name}
-								value={doctor.name}
+								key={doctor.$id}
+								value={doctor.$id}
 								className='cursor-pointer hover:bg-dark-500'
 							>
 								<div className='flex gap-2 items-center'>
 									<Image
-										src={doctor.image}
+										src={doctor.avatar}
 										width={32}
 										height={32}
 										alt={`${doctor.name} picture`}
