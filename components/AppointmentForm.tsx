@@ -62,7 +62,7 @@ const AppointmentForm = ({
 			btnLabel = 'Create Appointment'
 			break
 		case 'schedule':
-			btnLabel = 'Scheule Appointment'
+			btnLabel = 'Schedule Appointment'
 	}
 
 	const onSubmit = async (values: z.infer<typeof schema>) => {
@@ -140,7 +140,8 @@ const AppointmentForm = ({
 				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
 					{type !== 'cancel' && (
 						<>
-							<CustomFormField
+							{type === 'create' &&
+								<CustomFormField
 								control={form.control}
 								name='primaryPhysician'
 								placeholder='Select your primary physician'
@@ -167,6 +168,7 @@ const AppointmentForm = ({
 									</SelectItem>
 								))}
 							</CustomFormField>
+							}
 							<div
 								className={`flex flex-col gap-6 ${
 									type === 'create' && 'lg:flex-row'
