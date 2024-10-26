@@ -14,8 +14,8 @@ const Admin = async ({params: {id}}: SearchParamProps) => {
     if (!doctor) return <NoDetailsAlert title={'Professional details not set!'} link={`/doctor/${id}/details`}
                                         description={'to start managing appointments.'}/>
 
-    const appointmentsList = await getAppointments()
-    const statCounts = calculateStatCount(appointmentsList.documents)
+    const {appointments} = await getAppointments(doctor.$id)
+    const statCounts = calculateStatCount(appointments)
 
     return (
         <main className='admin-main'>
@@ -45,7 +45,7 @@ const Admin = async ({params: {id}}: SearchParamProps) => {
                     count={statCounts.cancelled}
                 />
             </section>
-            <DataTable columns={columns} data={appointmentsList.documents}/>
+            <DataTable columns={columns} data={appointments}/>
         </main>
     )
 }

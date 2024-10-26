@@ -56,17 +56,17 @@ export const getUserAppointements = async (userId: string) => {
 	}
 }
 
-export const getAppointments = async () => {
+export const getAppointments = async (docId: string) => {
 	try {
-		const appointments = await databases.listDocuments(
+		const res = await databases.listDocuments(
 			DATABASE_ID!,
 			APPOINTMENT_COLLECTION_ID!,
-			[Query.orderDesc('$createdAt')]
+			[Query.orderDesc('$createdAt'), Query.startsWith('primaryPhysician', docId)]
 		)
 
-		return parseStringify(appointments)
+		return parseStringify({appointments: res.documents as Appointment[]})
 	} catch (error: any) {
-		console.log(error)
+		return {error: error.message || 'Something went wrong.' }
 	}
 }
 
