@@ -88,7 +88,7 @@ export const columns: ColumnDef<Appointment>[] = [
                             height={24}
                             width={24}
                             alt={name}
-                            className='size-8'
+                            className='size-8 rounded-full'
                         />
                     )}
                     <p>Dr. {name}</p>
