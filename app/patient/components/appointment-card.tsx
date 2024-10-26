@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { Doctors } from '@/constants'
 import { cn, formatDateTime } from '@/lib/utils'
 import { Appointment } from '@/types/appwrite.types'
 import { Calendar } from 'lucide-react'
@@ -42,8 +41,9 @@ const AppointmentCard = async ({
 						<Image
 							width={16}
 							height={16}
-							src={doctor?.image!}
+							src={doctor?.avatar!}
 							alt={doctor?.name!}
+							className={'rounded-full'}
 						/>
 						{doctor?.name}
 					</div>

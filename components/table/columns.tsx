@@ -7,7 +7,7 @@ import {Button} from '../ui/button'
 import {ArrowUpDown} from 'lucide-react'
 import {formatDateTime} from '@/lib/utils'
 import {StatusBadge} from '../StatusBadge'
-import {Doctors, ONE_DAY_IN_MILLIS} from '@/constants'
+import {ONE_DAY_IN_MILLIS} from '@/constants'
 import Image from 'next/image'
 import AppointmentModal from '../AppointmentModal'
 
@@ -36,7 +36,7 @@ export const columns: ColumnDef<Appointment>[] = [
         accessorKey: 'patient',
         header: 'Patient',
         cell: ({row}) => (
-            <p className='text-14-medium'>{row.original.patient.name}</p>
+          <p className='text-14-medium'>{row.original.patient.name}</p>
         ),
     },
     {
@@ -78,22 +78,20 @@ export const columns: ColumnDef<Appointment>[] = [
         accessorKey: 'primaryPhysician',
         header: 'Doctor',
         cell: ({row}) => {
-            const doctor = Doctors.find(
-                doc => doc.name === row.getValue('primaryPhysician')
-            )
+            const {avatar, name}: { avatar:string; name:string } = row.getValue('primaryPhysician')
 
             return (
                 <div className='flex items-center gap-2'>
-                    {doctor && (
+                    {avatar && (
                         <Image
-                            src={doctor.image}
+                            src={avatar}
                             height={24}
                             width={24}
-                            alt={doctor.name}
+                            alt={name}
                             className='size-8'
                         />
                     )}
-                    <p>Dr. {row.getValue('primaryPhysician')}</p>
+                    <p>Dr. {name}</p>
                 </div>
             )
         },
