@@ -8,16 +8,15 @@ import CustomFormField from './CustomFormField'
 import SubmitBtn from './SubmitBtn'
 import { useState } from 'react'
 import { getAppointmentSchema } from '@/lib/validations'
-import { getUser } from '@/lib/actions/patient.actions'
 import { useRouter } from 'next/navigation'
-import { Doctors, FormFieldTypes } from '@/constants'
+import { FormFieldTypes } from '@/constants'
 import { SelectItem } from './ui/select'
 import Image from 'next/image'
 import {
 	createAppointment,
 	updateAppointment,
 } from '@/lib/actions/appointment.actions'
-import { Appointment } from '@/types/appwrite.types'
+import {Appointment, Doctor} from '@/types/appwrite.types'
 
 interface Props {
 	type: 'cancel' | 'create' | 'schedule'
@@ -26,6 +25,7 @@ interface Props {
 	doctor?: string
 	appointment?: Appointment
 	setOpen?: (open: boolean) => void
+	doctors?: Doctor[]
 }
 
 const AppointmentForm = ({
@@ -35,6 +35,7 @@ const AppointmentForm = ({
 	doctor,
 	appointment,
 	setOpen,
+	doctors
 }: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const router = useRouter()
@@ -43,7 +44,7 @@ const AppointmentForm = ({
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			primaryPhysician: doctor || appointment?.primaryPhysician || '',
+			primaryPhysician: doctor || appointment?.primaryPhysician.$id || '',
 			schedule: appointment ? new Date(appointment.schedule) : new Date(),
 			reason: appointment?.reason || '',
 			note: appointment?.note || '',
@@ -61,7 +62,7 @@ const AppointmentForm = ({
 			btnLabel = 'Create Appointment'
 			break
 		case 'schedule':
-			btnLabel = 'Scheule Appointment'
+			btnLabel = 'Schedule Appointment'
 	}
 
 	const onSubmit = async (values: z.infer<typeof schema>) => {
@@ -139,7 +140,8 @@ const AppointmentForm = ({
 				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
 					{type !== 'cancel' && (
 						<>
-							<CustomFormField
+							{type === 'create' &&
+								<CustomFormField
 								control={form.control}
 								name='primaryPhysician'
 								placeholder='Select your primary physician'
@@ -147,15 +149,15 @@ const AppointmentForm = ({
 								fieldType={FormFieldTypes.SELECT}
 								iconSrc='/assets/icons/stethoscope.svg'
 							>
-								{Doctors.map(doctor => (
+								{doctors?.map(doctor => (
 									<SelectItem
-										key={doctor.name}
-										value={doctor.name}
+										key={doctor.$id}
+										value={doctor.$id}
 										className='cursor-pointer hover:bg-dark-500'
 									>
 										<div className='flex gap-2 items-center'>
 											<Image
-												src={doctor.image}
+												src={doctor.avatar}
 												width={32}
 												height={32}
 												alt={`${doctor.name} picture`}
@@ -166,6 +168,7 @@ const AppointmentForm = ({
 									</SelectItem>
 								))}
 							</CustomFormField>
+							}
 							<div
 								className={`flex flex-col gap-6 ${
 									type === 'create' && 'lg:flex-row'

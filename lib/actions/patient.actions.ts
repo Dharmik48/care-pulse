@@ -15,6 +15,8 @@ import {
 import {parseStringify} from '../utils'
 import {InputFile} from 'node-appwrite/file'
 import {cookies} from 'next/headers'
+import {revalidatePath} from "next/cache";
+import {Patient} from "@/types/appwrite.types";
 
 export const createAccount = async (user: CreateAccountParams) => {
     try {
@@ -75,6 +77,8 @@ export const registerUser = async ({
             }
         )
 
+        revalidatePath(`/patient/${user.userId}/details`)
+
         return parseStringify(patient)
     } catch (error: any) {
         if (uploadedFile) await storage.deleteFile(BUCKET_ID!, uploadedFile.$id)
@@ -105,11 +109,11 @@ export const getPatientByUserId = async (userId: string) => {
             [Query.startsWith('userId', userId)]
         )
 
-        if (res.documents.length === 0) return parseStringify({patient: null})
+        if (res.documents.length === 0) return {patient: null}
 
-        return parseStringify({patient: res.documents[0]})
+        return {patient: res.documents[0] as Patient}
     } catch (error: any) {
-        return {error: error.message}
+        return {error: error.message, patient: null}
     }
 }
 

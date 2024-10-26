@@ -1,11 +1,11 @@
 import Image from 'next/image'
-import { Doctors } from '@/constants'
 import { cn, formatDateTime } from '@/lib/utils'
 import { Appointment } from '@/types/appwrite.types'
 import { Calendar } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import {getDoctor} from "@/lib/actions/doctor.actions";
 
-const AppointmentCard = ({
+const AppointmentCard = async ({
 	appointment,
 	showBadge,
 }: {
@@ -13,7 +13,7 @@ const AppointmentCard = ({
 	showBadge?: boolean
 }) => {
 	// TODO: change pending to yellow
-	const doctor = Doctors.find(doc => doc.name === appointment.primaryPhysician)
+	const {doctor} = await getDoctor(appointment.primaryPhysician.$id)
 	return (
 		<li
 			key={appointment.$id}
@@ -41,8 +41,9 @@ const AppointmentCard = ({
 						<Image
 							width={16}
 							height={16}
-							src={doctor?.image!}
+							src={doctor?.avatar!}
 							alt={doctor?.name!}
+							className={'rounded-full'}
 						/>
 						{doctor?.name}
 					</div>
