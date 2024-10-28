@@ -74,28 +74,28 @@ export const columns: ColumnDef<Appointment>[] = [
         filterFn: (row, columnId, filterValue) =>
             filterValue.indexOf(row.getValue('status')) >= 0,
     },
-    {
-        accessorKey: 'primaryPhysician',
-        header: 'Doctor',
-        cell: ({row}) => {
-            const {avatar, name}: { avatar:string; name:string } = row.getValue('primaryPhysician')
-
-            return (
-                <div className='flex items-center gap-2'>
-                    {avatar && (
-                        <Image
-                            src={avatar}
-                            height={24}
-                            width={24}
-                            alt={name}
-                            className='size-8 rounded-full'
-                        />
-                    )}
-                    <p>Dr. {name}</p>
-                </div>
-            )
-        },
-    },
+    // {
+    //     accessorKey: 'primaryPhysician',
+    //     header: 'Doctor',
+    //     cell: ({row}) => {
+    //         const {avatar, name}: { avatar:string; name:string } = row.getValue('primaryPhysician')
+    //
+    //         return (
+    //             <div className='flex items-center gap-2'>
+    //                 {avatar && (
+    //                     <Image
+    //                         src={avatar}
+    //                         height={24}
+    //                         width={24}
+    //                         alt={name}
+    //                         className='size-8 rounded-full'
+    //                     />
+    //                 )}
+    //                 <p>Dr. {name}</p>
+    //             </div>
+    //         )
+    //     },
+    // },
     {
         accessorKey: 'actions',
         header: () => <span className='ml-4'>Actions</span>,
