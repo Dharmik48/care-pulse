@@ -20,7 +20,7 @@ const Admin = async ({params: {id}}: SearchParamProps) => {
     return (
         <main className='admin-main'>
             <section className='w-full space-y-2'>
-                <h2 className='header'>Welcome, Admin</h2>
+                <h2 className='header'>Welcome, {doctor.name}</h2>
                 <p className='text-dark-700'>
                     Start day with managing new appointments
                 </p>
