@@ -18,8 +18,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Tiptap from "@/components/TipTap";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { createGuide } from "@/lib/actions/guide.actions";
+import { getLoggedInUser } from "@/lib/actions/patient.actions";
 
-const GuideForm = () => {
+const GuideForm = ({userId}: {userId:string}) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -33,24 +35,23 @@ const GuideForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof GuideFormValidation>) => {
-    // setIsLoading(true);
-    console.log(values);
-    // const { email, password } = values
-    //
-    // try {
-    //     const { error } = await loginUser(email, password)
-    //     if (error) throw new Error(error)
-    //
-    //     router.replace('/login')
-    // } catch (error: any) {
-    //     toast({
-    //         title: 'Oh no! Something went wrong.',
-    //         description: error.message,
-    //         variant: 'destructive',
-    //     })
-    // } finally {
-    //     setIsLoading(false)
-    // }
+    setIsLoading(true);
+    const { title, body } = values;
+
+    try {
+      const { error } = await createGuide(title, body, userId);
+      if (error) throw new Error(error);
+
+      router.replace(`/doctor/${userId}`);
+    } catch (error: any) {
+      toast({
+        title: "Oh no! Something went wrong.",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -95,6 +96,7 @@ const GuideForm = () => {
             disabled={isLoading}
             render={({ field }) => (
               <FormItem className="flex-1">
+                <FormMessage className="shad-error" />
                 <FormControl>
                   <Tiptap
                     content={field.value}
@@ -102,7 +104,6 @@ const GuideForm = () => {
                     placeholder={"Start writing here..."}
                   />
                 </FormControl>
-                <FormMessage className="shad-error" />
               </FormItem>
             )}
           />

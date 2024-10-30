@@ -1,6 +1,6 @@
 'use server'
 
-import {Account, Client, ID, Query} from 'node-appwrite'
+import {Account, Client, ID, Models, Query} from 'node-appwrite'
 import {
     account,
     APPWRITE_PROJECT_ID,
@@ -133,7 +133,7 @@ export const getLoggedInUser = async () => {
         const account = new Account(client)
         const user = await account.get()
 
-        return parseStringify({user})
+        return {user}
     } catch (error: any) {
         return {error: error.message}
     }

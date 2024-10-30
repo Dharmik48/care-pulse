@@ -3,7 +3,7 @@ import { getLoggedInUser } from './lib/actions/patient.actions'
 import { Models } from 'node-appwrite'
 
 export async function middleware(request: NextRequest) {
-	const { user }: { user: Models.User<Models.Preferences> } =
+	const { user } =
 		await getLoggedInUser()
 
 	if (

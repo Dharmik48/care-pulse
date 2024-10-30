@@ -35,7 +35,7 @@ const Tiptap = ({
         },
       }),
     ],
-    content: content.length ? content : "Start writing here...",
+    content,
     editorProps: {
       attributes: {
         class:
@@ -45,19 +45,27 @@ const Tiptap = ({
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
+    immediatelyRender: false
   });
 
   return (
-    <div className={"min-h-40 rounded-md"}>
+    <div className={"min-h-40 rounded-md relative"}>
       {editor && (
-        <BubbleMenu
-          editor={editor}
-          tippyOptions={{ duration: 100 }}
-          className={"bg-card"}
-        >
-          <ToolBar editor={editor} />
-        </BubbleMenu>
+        <>
+          <BubbleMenu
+            editor={editor}
+            tippyOptions={{ duration: 100 }}
+            className={"bg-card"}
+          >
+            <ToolBar editor={editor} />
+          </BubbleMenu>
+          {
+              editor.isEmpty &&
+              <p className='absolute z-10 mt-2 text-sm text-muted-foreground'>Start writing here...</p>
+          }
+        </>
       )}
+
       <EditorContent editor={editor} />
     </div>
   );
