@@ -37,7 +37,7 @@ const Doctor = async ({params}: SearchParamProps) => {
                     <h3 className='sub-header'>Guides</h3>
                     {
                         doctor &&
-                        <Link href={`/guides/${id}/new-guide`}>
+                        <Link href={`/guides/new`}>
                             <Button>
                                 <Pencil size={18} className='mr-1'/> New Guide
                             </Button>

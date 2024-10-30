@@ -1,30 +1,18 @@
-import { Control } from 'react-hook-form'
-import {
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from './ui/form'
-import { Input } from './ui/input'
+import {Control} from 'react-hook-form'
+import {FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,} from './ui/form'
+import {Input} from './ui/input'
 import Image from 'next/image'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
-import { FormFieldTypes } from '@/constants'
+import {FormFieldTypes} from '@/constants'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
-import { cn } from '@/lib/utils'
-import { Textarea } from './ui/textarea'
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectTrigger,
-	SelectValue,
-} from './ui/select'
-import { Checkbox } from './ui/checkbox'
+import {cn} from '@/lib/utils'
+import {Textarea} from './ui/textarea'
+import {Select, SelectContent, SelectGroup, SelectTrigger, SelectValue,} from './ui/select'
+import {Checkbox} from './ui/checkbox'
+import Tiptap from "@/components/TipTap";
 
 interface Props {
 	control: Control<any>
@@ -193,18 +181,24 @@ const RenderField = ({ field, props }: { field: any; props: Props }) => {
 					</div>
 				</FormControl>
 			)
+		case FormFieldTypes.RICHTEXT:
+			return (
+				<FormControl>
+					<Tiptap content={field.value} onChange={field.onChange} placeholder={props.placeholder} />
+				</FormControl>
+			)
 	}
 }
 
 const CustomFormField = (props: Props) => {
-	const { control, name, fieldType, label, description, className } = props
+	const {control, name, fieldType, label, description, className} = props
 
 	return (
 		<FormField
 			control={control}
 			name={name}
 			disabled={props.disabled}
-			render={({ field }) => (
+			render={({field}) => (
 				<FormItem className={cn('flex-1', className)}>
 					{fieldType !== FormFieldTypes.CHECKBOX && label && (
 						<FormLabel>{label}</FormLabel>
