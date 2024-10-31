@@ -69,7 +69,7 @@ export const registerUser = async ({
         const patient = await databases.createDocument(
             DATABASE_ID!,
             PATIENT_COLLECTION_ID!,
-            ID.unique(),
+            user.userId,
             {
                 identificationDocumentId: uploadedFile.$id,
                 identificationDocumentUrl: `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${uploadedFile.$id}/view?project=${APPWRITE_PROJECT_ID}`,
