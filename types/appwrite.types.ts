@@ -54,4 +54,5 @@ export interface Guide extends Models.Document {
     title: string
     body: string
     doctor: Doctor
+    status: 'draft' | 'published'
 }

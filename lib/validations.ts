@@ -134,7 +134,8 @@ export const DoctorFormValidation = z.object({
 
 export const GuideFormValidation = z.object({
     title: z.string().min(5, 'Title must be at least 5 characters').max(100, 'Title must be at most 100 characters'),
-    body: z.string().min(50, 'There must be at least 50 characters').max(4000, 'Max characters limit reached')
+    body: z.string().min(50, 'There must be at least 50 characters').max(4000, 'Max characters limit reached'),
+    status: z.string(),
 })
 
 export const CreateAppointmentSchema = z.object({

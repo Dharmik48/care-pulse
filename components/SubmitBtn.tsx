@@ -5,14 +5,18 @@ interface Props {
 	className?: string
 	children: React.ReactNode
 	isLoading: boolean
+	variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined
+	onClick?: () => void
 }
 
-const SubmitBtn = ({ className, children, isLoading }: Props) => {
+const SubmitBtn = ({ className, children, isLoading, variant = 'default', onClick }: Props) => {
 	return (
 		<Button
 			type='submit'
 			className={className ?? 'shad-primary-btn w-full'}
 			disabled={isLoading}
+			variant={variant}
+			onClick={onClick}
 		>
 			{isLoading ? (
 				<>
