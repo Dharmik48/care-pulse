@@ -56,7 +56,8 @@ const GuideForm = ({ userId, guide }: { userId: string; guide?: Guide }) => {
 			if (error) throw new Error(error)
 			if (!updatedGuide) throw new Error('Could not create guide')
 
-			if (status === 'published') router.push(`/doctor/${userId}`)
+			if (status === 'published') router.push(`/doctor/${userId}/guides`)
+			else if (!!guide) router.refresh()
 			else router.push(`/doctor/${userId}/guides/${updatedGuide.$id}`)
 		} catch (error: any) {
 			toast({
@@ -132,7 +133,7 @@ const GuideForm = ({ userId, guide }: { userId: string; guide?: Guide }) => {
 									<Tiptap
 										content={field.value}
 										onChange={field.onChange}
-										disabled={true}
+										disabled={isLoading}
 									/>
 								</FormControl>
 							</FormItem>
