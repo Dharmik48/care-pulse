@@ -7,7 +7,7 @@ import {redirect} from "next/navigation";
 const Guide = async () => {
   const {user} = await getLoggedInUser();
 
-  if(!user!.labels.includes('doctor')) return redirect("/login");
+  if(!user || !user.labels.includes('doctor')) return redirect("/login");
 
   return (
     <main className="flex min-h-screen">
