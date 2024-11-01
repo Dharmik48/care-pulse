@@ -109,3 +109,17 @@ export const removeGuide = async (gid: string, id: string) => {
 		return { error: error.message || 'Something went wrong' }
 	}
 }
+
+export const getGuides = async (queries?: string[]) => {
+	try {
+		const guides = await databases.listDocuments(
+			DATABASE_ID!,
+			GUIDE_COLLECTION_ID!,
+			queries
+		)
+
+		return { guides: guides.documents as Guide[] }
+	} catch (error: any) {
+		return { error: error.message || 'Something went wrong' }
+	}
+}
