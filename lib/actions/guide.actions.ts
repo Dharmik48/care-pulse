@@ -8,9 +8,10 @@ import {
 	DOCTOR_COLLECTION_ID,
 	GUIDE_COLLECTION_ID,
 } from '@/lib/appwrite.config'
-import { ID } from 'node-appwrite'
+import { ID, Query } from 'node-appwrite'
 import { getDoctorByUserId } from '@/lib/actions/doctor.actions'
 import { Guide } from '@/types/appwrite.types'
+import { revalidatePath } from 'next/cache'
 
 export const createGuide = async (
 	title: string,
@@ -44,6 +45,7 @@ export const createGuide = async (
 			}
 		)
 
+		revalidatePath(`/doctor/${doctor.$id}/guides`)
 		return { guide }
 	} catch (error: any) {
 		return { error: error.message || 'Something went wrong' }
@@ -75,7 +77,22 @@ export const updateGuide = async (id: string, data: UpdateGuideParams) => {
 			data
 		)
 
+		revalidatePath(`/doctor/${guide.doctor.$id}/guides`)
 		return { guide: guide as Guide }
+	} catch (error: any) {
+		return { error: error.message || 'Something went wrong' }
+	}
+}
+
+export const getDoctorGuides = async (id: string) => {
+	try {
+		const res = await databases.listDocuments(
+			DATABASE_ID!,
+			GUIDE_COLLECTION_ID!,
+			[Query.startsWith('doctor', id)]
+		)
+
+		return { guides: res.documents as Guide[] }
 	} catch (error: any) {
 		return { error: error.message || 'Something went wrong' }
 	}
