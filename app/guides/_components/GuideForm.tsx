@@ -91,7 +91,7 @@ const GuideForm = ({ userId, guide }: { userId: string; guide?: Guide }) => {
 									<div className='flex rounded-md bg-dark-400'>
 										<FormControl>
 											<Input
-												className='border-0 px-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-3xl'
+												className='border-0 px-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-3xl font-bold'
 												placeholder={'Title'}
 												{...field}
 											/>

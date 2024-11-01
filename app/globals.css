@@ -342,16 +342,23 @@
     h1.guide-heading {
         @apply text-2xl !important;
     }
+
     h2.guide-heading {
         @apply text-xl !important;
     }
+
     h3.guide-heading {
         @apply text-lg !important;
+    }
+
+    .guide-heading:not(:first-child):not(:last-child) {
+        @apply my-4;
     }
 
     ul.guide-ul {
         @apply my-6 ml-6 list-disc [&>li]:mt-2 !important;
     }
+
     ol.guide-ol {
         @apply my-6 ml-6 list-decimal [&>li]:mt-2 !important;
     }

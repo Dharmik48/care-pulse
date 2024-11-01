@@ -9,7 +9,7 @@ const GuideCard = ({ guide }: { guide: Guide }) => {
 			<div className='flex w-full flex-col gap-1'>
 				<div className='flex items-center relative'>
 					<div className='flex items-center gap-2'>
-						<div className='font-semibold text-lg'>{guide.title}</div>
+						<h3 className='font-semibold text-lg'>{guide.title}</h3>
 					</div>
 				</div>
 				<div className='flex items-center gap-2'>
@@ -32,6 +32,12 @@ const GuideCard = ({ guide }: { guide: Guide }) => {
 			<div className='line-clamp-2'>
 				{guide.body.replace(/<[^>]*>?/gm, '').substring(0, 300)}
 			</div>
+			<Link
+				href={`/guides/${guide.$id}`}
+				className='group-hover:underline hover:text-primary transition-colors text-muted-foreground'
+			>
+				Read More
+			</Link>
 		</li>
 	)
 }
