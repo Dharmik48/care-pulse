@@ -25,6 +25,7 @@ import {
 	SelectValue,
 } from './ui/select'
 import { Checkbox } from './ui/checkbox'
+import Tiptap from '@/components/TipTap'
 
 interface Props {
 	control: Control<any>

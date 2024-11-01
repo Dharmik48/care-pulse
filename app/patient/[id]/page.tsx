@@ -22,6 +22,8 @@ const Patient = async ({params}: SearchParamProps) => {
     const {id} = params
     const {user} = await getLoggedInUser()
 
+    if(!user) return redirect('/login')
+
     const url = user.labels.includes('doctor')
         ? `/doctor/${user.$id}`
         : `/patient/${user.$id}`

@@ -338,6 +338,23 @@
     .date-picker {
         @apply overflow-hidden border-transparent w-full placeholder:text-dark-600 h-11 text-14-medium rounded-md px-3 outline-none !important;
     }
+
+    h1.guide-heading {
+        @apply text-2xl !important;
+    }
+    h2.guide-heading {
+        @apply text-xl !important;
+    }
+    h3.guide-heading {
+        @apply text-lg !important;
+    }
+
+    ul.guide-ul {
+        @apply my-6 ml-6 list-disc [&>li]:mt-2 !important;
+    }
+    ol.guide-ol {
+        @apply my-6 ml-6 list-decimal [&>li]:mt-2 !important;
+    }
 }
 
 /* =====  REACT-DATEPICKER OVERRIDES */

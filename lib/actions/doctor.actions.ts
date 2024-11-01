@@ -32,10 +32,11 @@ export const registerDoctor = async ({licenseDocument, avatar, ...data}: Registe
         uploadedAvatar = await storage.createFile(BUCKET_ID!, ID.unique(), avatarFile)
 
         // add user to db
+        // TODO make doc ID same as loggedin user id
         const doctor = await databases.createDocument(
             DATABASE_ID!,
             DOCTOR_COLLECTION_ID!,
-            ID.unique(),
+            data.userId,
             {
                 ...data,
                 licenseDocumentId: uploadedLicense.$id,

@@ -12,6 +12,7 @@ export enum FormFieldTypes {
     SKELETON = 'skeleton',
     SELECT = 'select',
     PASSWORD = 'password',
+    RICHTEXT = 'richtext',
 }
 
 export const PatientFormDefaultValues = {

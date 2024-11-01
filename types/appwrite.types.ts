@@ -47,4 +47,12 @@ export interface Doctor extends Models.Document {
     licenseDocumentId: string
     licenseDocumentUrl: string
     terms: boolean
+    guides: Guide[]
+}
+
+export interface Guide extends Models.Document {
+    title: string
+    body: string
+    doctor: Doctor
+    status: 'draft' | 'published'
 }
