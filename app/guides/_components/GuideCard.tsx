@@ -3,8 +3,9 @@ import { cn, formatDateTime } from '@/lib/utils'
 import { Guide } from '@/types/appwrite.types'
 import { Clock, ExternalLink, Pencil, Trash } from 'lucide-react'
 import Link from 'next/link'
+import DeleteDialog from './DeleteDialog'
 
-const GuideCard = async ({ guide }: { guide: Guide }) => {
+const GuideCard = ({ guide }: { guide: Guide }) => {
 	return (
 		<li
 			className={cn(
@@ -32,9 +33,11 @@ const GuideCard = async ({ guide }: { guide: Guide }) => {
 								</Badge>
 							</Link>
 						)}
-						<Badge className='bg-destructive hover:opacity-100'>
-							<Trash size={14} className='mr-1' /> Delete
-						</Badge>
+						<DeleteDialog gid={guide.$id} id={guide.doctor.$id}>
+							<Badge className='bg-destructive hover:opacity-100 hover:bg-destructive/80'>
+								<Trash size={14} className='mr-1' /> Delete
+							</Badge>
+						</DeleteDialog>
 					</div>
 				</div>
 				<div className='flex items-center gap-2'>
@@ -42,17 +45,6 @@ const GuideCard = async ({ guide }: { guide: Guide }) => {
 						<Clock size={16} />
 						{formatDateTime(guide.$updatedAt).dateTime}
 					</div>
-
-					{/* <div className='text-xs font-medium flex items-center gap-1'>
-						<Image
-							width={16}
-							height={16}
-							src={doctor?.avatar!}
-							alt={doctor?.name!}
-							className={'rounded-full'}
-						/>
-						{doctor?.name}
-					</div> */}
 				</div>
 			</div>
 			<div className='line-clamp-2 text-xs text-muted-foreground group-hover:text-destructive-foreground transition-colors'>
@@ -72,9 +64,11 @@ const GuideCard = async ({ guide }: { guide: Guide }) => {
 						</Badge>
 					</Link>
 				)}
-				<Badge className='bg-destructive hover:opacity-100'>
-					<Trash size={14} className='mr-1' /> Delete
-				</Badge>
+				<DeleteDialog gid={guide.$id} id={guide.doctor.$id}>
+					<Badge className='bg-destructive hover:opacity-100 hover:bg-destructive/80'>
+						<Trash size={14} className='mr-1' /> Delete
+					</Badge>
+				</DeleteDialog>
 			</div>
 		</li>
 	)

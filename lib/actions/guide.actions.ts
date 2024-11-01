@@ -97,3 +97,15 @@ export const getDoctorGuides = async (id: string) => {
 		return { error: error.message || 'Something went wrong' }
 	}
 }
+
+export const removeGuide = async (gid: string, id: string) => {
+	try {
+		await databases.deleteDocument(DATABASE_ID!, GUIDE_COLLECTION_ID!, gid)
+
+		revalidatePath(`/doctor/${id}/guides`)
+
+		return { error: null }
+	} catch (error: any) {
+		return { error: error.message || 'Something went wrong' }
+	}
+}
