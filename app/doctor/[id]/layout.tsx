@@ -1,5 +1,6 @@
 import { Separator } from '@/components/ui/separator'
 import { SidebarNav } from '@/components/sidebar-nav'
+import Navbar from '@/components/Navbar'
 
 interface SettingsLayoutProps {
 	children: React.ReactNode
@@ -33,6 +34,7 @@ export default function SettingsLayout({
 
 	return (
 		<div className='space-y-6 p-10'>
+			<Navbar />
 			<div className='space-y-0.5'>
 				<h2 className='text-2xl font-bold tracking-tight'>Settings</h2>
 				<p className='text-muted-foreground'>
